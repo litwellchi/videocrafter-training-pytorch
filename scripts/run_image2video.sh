@@ -1,10 +1,10 @@
 name="i2v_512_test"
 
-ckpt='checkpoints/i2v_512_v1/model.ckpt'
+ckpt='ckpts/Image2Video320x512/model.ckpt'
 config='configs/inference_i2v_512_v1.0.yaml'
 
-prompt_file="prompts/i2v_prompts/test_prompts.txt"
-condimage_dir="prompts/i2v_prompts"
+prompt_file="test_demo/demo_prompts/dragon.txt"
+condimage_dir="test_demo/demo_image"
 res_dir="results"
 
 python3 scripts/evaluation/inference.py \

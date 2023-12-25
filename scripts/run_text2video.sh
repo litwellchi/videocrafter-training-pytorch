@@ -1,9 +1,9 @@
 name="base_1024_test"
 
-ckpt='checkpoints/base_1024_v1/model.ckpt'
+ckpt='ckpts/Text2Video576x1024/model.ckpt'
 config='configs/inference_t2v_1024_v1.0.yaml'
 
-prompt_file="prompts/test_prompts.txt"
+prompt_file="test_demo/demo_prompts/crocodile.txt"
 res_dir="results"
 
 python3 scripts/evaluation/inference.py \

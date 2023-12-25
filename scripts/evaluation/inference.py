@@ -38,6 +38,16 @@ def get_parser():
     parser.add_argument("--cond_input", type=str, default=None, help="data dir of conditional input")
     return parser
 
+def count_parameters(model, print_=True):
+    """
+    :param model: 模型
+    :param print_: 是否打印出参数量，单位M(百万)
+    :return: 参数量
+    """
+    num = sum([param.nelement() for param in model.parameters()])
+    if print_ is True:
+        print("Number of parameter: %.5fM" % (num / 1e6))
+    return num
 
 def run_inference(args, gpu_num, gpu_no, **kwargs):
     ## step 1: model config
@@ -50,6 +60,8 @@ def run_inference(args, gpu_num, gpu_no, **kwargs):
     assert os.path.exists(args.ckpt_path), f"Error: checkpoint [{args.ckpt_path}] Not Found!"
     model = load_model_checkpoint(model, args.ckpt_path)
     model.eval()
+    count_parameters(model)
+    exit(0)
 
     ## sample shape
     assert (args.height % 16 == 0) and (args.width % 16 == 0), "Error: image size [h,w] should be multiples of 16!"
