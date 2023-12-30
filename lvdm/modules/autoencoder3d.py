@@ -1,14 +1,17 @@
-import os
-from contextlib import contextmanager
 import torch
-import numpy as np
-from einops import rearrange
-import torch.nn.functional as F
 import pytorch_lightning as pl
-from lvdm.modules.networks.ae_modules import Encoder, Decoder
-from lvdm.distributions import DiagonalGaussianDistribution
-from utils.utils import instantiate_from_config
+import torch.nn.functional as F
 
+from lvdm.models.modules.networks.aemodules3d import SamePadConv3d
+from lvdm.utils.common_utils import instantiate_from_config
+from lvdm import DiagonalGaussianDistribution
+
+
+def conv3d(in_channels, out_channels, kernel_size, conv3d_type='SamePadConv3d'):
+    if conv3d_type == 'SamePadConv3d':
+        return SamePadConv3d(in_channels, out_channels, kernel_size=kernel_size, padding_type='replicate')
+    else:
+        raise NotImplementedError
 
 class AutoencoderKL(pl.LightningModule):
     def __init__(self,
@@ -18,72 +21,35 @@ class AutoencoderKL(pl.LightningModule):
                  ckpt_path=None,
                  ignore_keys=[],
                  image_key="image",
-                 colorize_nlabels=None,
                  monitor=None,
-                 test=False,
-                 logdir=None,
-                 input_dim=4,
-                 test_args=None,
+                 std=1.,
+                 mean=0.,
+                 prob=0.2,
                  ):
         super().__init__()
         self.image_key = image_key
-        self.encoder = Encoder(**ddconfig)
-        self.decoder = Decoder(**ddconfig)
+        self.encoder = instantiate_from_config(ddconfig['encoder'])
+        self.decoder = instantiate_from_config(ddconfig['decoder'])
         self.loss = instantiate_from_config(lossconfig)
         assert ddconfig["double_z"]
-        self.quant_conv = torch.nn.Conv2d(2*ddconfig["z_channels"], 2*embed_dim, 1)
-        self.post_quant_conv = torch.nn.Conv2d(embed_dim, ddconfig["z_channels"], 1)
+        self.quant_conv = conv3d(2*ddconfig["z_channels"], 2*embed_dim, 1)
+        self.post_quant_conv = conv3d(embed_dim, ddconfig["z_channels"], 1)
         self.embed_dim = embed_dim
-        self.input_dim = input_dim
-        self.test = test
-        self.test_args = test_args
-        self.logdir = logdir
-        if colorize_nlabels is not None:
-            assert type(colorize_nlabels)==int
-            self.register_buffer("colorize", torch.randn(3, colorize_nlabels, 1, 1))
+        self.std = std
+        self.mean = mean
+        self.prob = prob
         if monitor is not None:
             self.monitor = monitor
         if ckpt_path is not None:
             self.init_from_ckpt(ckpt_path, ignore_keys=ignore_keys)
-        if self.test:
-            self.init_test()
-    
-    def init_test(self,):
-        self.test = True
-        save_dir = os.path.join(self.logdir, "test")
-        if 'ckpt' in self.test_args:
-            ckpt_name = os.path.basename(self.test_args.ckpt).split('.ckpt')[0] + f'_epoch{self._cur_epoch}'
-            self.root = os.path.join(save_dir, ckpt_name)
-        else:
-            self.root = save_dir
-        if 'test_subdir' in self.test_args:
-            self.root = os.path.join(save_dir, self.test_args.test_subdir)
-
-        self.root_zs = os.path.join(self.root, "zs")
-        self.root_dec = os.path.join(self.root, "reconstructions")
-        self.root_inputs = os.path.join(self.root, "inputs")
-        os.makedirs(self.root, exist_ok=True)
-
-        if self.test_args.save_z:
-            os.makedirs(self.root_zs, exist_ok=True)
-        if self.test_args.save_reconstruction:
-            os.makedirs(self.root_dec, exist_ok=True)
-        if self.test_args.save_input:
-            os.makedirs(self.root_inputs, exist_ok=True)
-        assert(self.test_args is not None)
-        self.test_maximum = getattr(self.test_args, 'test_maximum', None) 
-        self.count = 0
-        self.eval_metrics = {}
-        self.decodes = []
-        self.save_decode_samples = 2048
-
+            
     def init_from_ckpt(self, path, ignore_keys=list()):
         sd = torch.load(path, map_location="cpu")
         try:
             self._cur_epoch = sd['epoch']
             sd = sd["state_dict"]
         except:
-            self._cur_epoch = 'null'
+            pass
         keys = list(sd.keys())
         for k in keys:
             for ik in ignore_keys:
@@ -91,7 +57,6 @@ class AutoencoderKL(pl.LightningModule):
                     print("Deleting key {} from state_dict.".format(k))
                     del sd[k]
         self.load_state_dict(sd, strict=False)
-        # self.load_state_dict(sd, strict=True)
         print(f"Restored from {path}")
 
     def encode(self, x, **kwargs):
@@ -105,7 +70,7 @@ class AutoencoderKL(pl.LightningModule):
         dec = self.decoder(z)
         return dec
 
-    def forward(self, input, sample_posterior=True):
+    def forward(self, input, sample_posterior=True, **kwargs):
         posterior = self.encode(input)
         if sample_posterior:
             z = posterior.sample()
@@ -116,12 +81,9 @@ class AutoencoderKL(pl.LightningModule):
 
     def get_input(self, batch, k):
         x = batch[k]
-        if x.dim() == 5 and self.input_dim == 4:
-            b,c,t,h,w = x.shape
-            self.b = b
-            self.t = t 
-            x = rearrange(x, 'b c t h w -> (b t) c h w')
-
+        if len(x.shape) == 4:
+            x = x[..., None]
+        x = x.to(memory_format=torch.contiguous_format).float()
         return x
 
     def training_step(self, batch, batch_idx, optimizer_idx):
@@ -196,23 +158,4 @@ class AutoencoderKL(pl.LightningModule):
             self.register_buffer("colorize", torch.randn(3, x.shape[1], 1, 1).to(x))
         x = F.conv2d(x, weight=self.colorize)
         x = 2.*(x-x.min())/(x.max()-x.min()) - 1.
-        return x
-
-class IdentityFirstStage(torch.nn.Module):
-    def __init__(self, *args, vq_interface=False, **kwargs):
-        self.vq_interface = vq_interface  # TODO: Should be true by default but check to not break older stuff
-        super().__init__()
-
-    def encode(self, x, *args, **kwargs):
-        return x
-
-    def decode(self, x, *args, **kwargs):
-        return x
-
-    def quantize(self, x, *args, **kwargs):
-        if self.vq_interface:
-            return x, None, [None, None, None]
-        return x
-
-    def forward(self, x, *args, **kwargs):
         return x

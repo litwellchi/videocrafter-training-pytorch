@@ -22,7 +22,7 @@ model:
     use_ema: false
     uncond_type: empty_seq
     monitor: val/loss_simple_ema
-    encoder_type: 3d
+    encoder_type: 2d
 
     unet_config:
       target: lvdm.modules.networks.openaimodel3d.UNetModel
@@ -81,31 +81,31 @@ model:
         layer: penultimate
 
 data:
-  target: main.DataModuleFromConfig
+  target: train_main.DataModuleFromConfig
   params:
-    batch_size: 3
+    batch_size: 1
     num_workers: 0
     wrap: false
     train:
-      target: lvdm.data.frame_dataset.VideoFrameDataset
+      target: lvdm.data.webvid.WebVid
       params:
-        data_root: ${data_root}
+        data_root: /mnt/data/chixiaowei/webvid_test/data
         resolution: 256
         video_length: 16
-        dataset_name: sky
-        subset_split: train
-        spatial_transform: center_crop_resize
-        temporal_transform: rand_clips
+        # dataset_name: webvid
+        subset_split: all
+        # spatial_transform: center_crop_resize
+        # temporal_transform: rand_clips
     validation:
-      target: lvdm.data.frame_dataset.VideoFrameDataset
+      target: lvdm.data.webvid.WebVid
       params:
-        data_root: ${data_root}
+        data_root: /mnt/data/chixiaowei/webvid_test/data
         resolution: 256
         video_length: 16
-        dataset_name: sky
-        subset_split: test
-        spatial_transform: center_crop_resize
-        temporal_transform: rand_clips
+        # dataset_name: webvid
+        subset_split: all
+        # spatial_transform: center_crop_resize
+        # temporal_transform: rand_clips
 
 lightning:
   callbacks:
@@ -124,8 +124,8 @@ lightning:
         every_n_train_steps: null
   trainer:
     benchmark: True
-    batch_size: 3
-    num_workers: 0
+    batch_size: 1
+    num_workers: 38
     num_nodes: 4
     accumulate_grad_batches: 2
     max_epochs: 2000

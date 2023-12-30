@@ -22,6 +22,7 @@ from lvdm.ema import LitEma
 from lvdm.distributions import DiagonalGaussianDistribution
 from lvdm.models.utils_diffusion import make_beta_schedule
 from lvdm.modules.encoders.ip_resampler import ImageProjModel, Resampler
+import time
 from lvdm.basics import disabled_train
 from lvdm.common import (
     extract_into_tensor,
@@ -269,6 +270,9 @@ class DDPM(pl.LightningModule):
 
     def q_sample(self, x_start, t, noise=None):
         noise = default(noise, lambda: torch.randn_like(x_start))
+        # extract_into_tensor(self.sqrt_alphas_cumprod, t, x_start.shape)
+        # extract_into_tensor(self.scale_arr, t, x_start.shape)
+        # extract_into_tensor(self.sqrt_one_minus_alphas_cumprod, t, x_start.shape)
         return (extract_into_tensor(self.sqrt_alphas_cumprod, t, x_start.shape) * x_start *
                 extract_into_tensor(self.scale_arr, t, x_start.shape) +
                 extract_into_tensor(self.sqrt_one_minus_alphas_cumprod, t, x_start.shape) * noise)
@@ -322,6 +326,137 @@ class DDPM(pl.LightningModule):
             else:
                 return {key: log[key] for key in return_keys}
         return log
+    
+    def shared_step(self, batch):
+        x = self.get_input(batch, self.first_stage_key)
+        loss, loss_dict = self(x)
+        return loss, loss_dict
+    
+    def training_step(self, batch, batch_idx):
+        loss, loss_dict = self.shared_step(batch)
+
+        self.log_dict(loss_dict, prog_bar=True,
+                      logger=True, on_step=True, on_epoch=True)
+
+        self.log("global_step", self.global_step,
+                 prog_bar=True, logger=True, on_step=True, on_epoch=False)
+
+        if self.use_scheduler:
+            lr = self.optimizers().param_groups[0]['lr']
+            self.log('lr_abs', lr, prog_bar=True, logger=True, on_step=True, on_epoch=False)
+        
+        return loss
+
+    @torch.no_grad()
+    def validation_step(self, batch, batch_idx):
+        _, loss_dict_no_ema = self.shared_step(batch)
+        with self.ema_scope():
+            _, loss_dict_ema = self.shared_step(batch)
+            loss_dict_ema = {key + '_ema': loss_dict_ema[key] for key in loss_dict_ema}
+        self.log_dict(loss_dict_no_ema, prog_bar=False, logger=True, on_step=False, on_epoch=True)
+        self.log_dict(loss_dict_ema, prog_bar=False, logger=True, on_step=False, on_epoch=True)
+        
+    def get_condition_validate(self, prompt):
+        """ text embd
+        """
+        if isinstance(prompt, str):
+            prompt = [prompt]
+        c = self.get_learned_conditioning(prompt)
+        bs = c.shape[0]
+        
+        return c
+    
+    def on_train_batch_end(self, *args, **kwargs):
+        if self.use_ema:
+            self.model_ema(self.model)
+        
+    def training_epoch_end(self, outputs):
+        
+        if (self.current_epoch == 0) or self.resume_new_epoch == 0:
+            self.epoch_start_time = time.time()
+            self.current_epoch_time = 0
+            self.total_time = 0
+            self.epoch_time_avg = 0
+        else:
+            self.current_epoch_time = time.time() - self.epoch_start_time
+            self.epoch_start_time = time.time()
+            self.total_time += self.current_epoch_time
+            self.epoch_time_avg = self.total_time / self.current_epoch
+        self.resume_new_epoch += 1
+        epoch_avg_loss = torch.stack([x['loss'] for x in outputs]).mean()
+        
+        self.log('train/epoch/loss', epoch_avg_loss, logger=True, on_epoch=True)
+        self.log('train/epoch/idx', self.current_epoch, logger=True, on_epoch=True)
+        self.log('train/epoch/time', self.current_epoch_time, logger=True, on_epoch=True)
+        self.log('train/epoch/time_avg', self.epoch_time_avg, logger=True, on_epoch=True)
+        self.log('train/epoch/time_avg_min', self.epoch_time_avg / 60, logger=True, on_epoch=True)
+
+    def _get_rows_from_list(self, samples):
+        n_imgs_per_row = len(samples)
+        denoise_grid = rearrange(samples, 'n b c t h w -> b n c t h w')
+        denoise_grid = rearrange(denoise_grid, 'b n c t h w -> (b n) c t h w')
+        denoise_grid = rearrange(denoise_grid, 'n c t h w -> (n t) c h w')
+        denoise_grid = make_grid(denoise_grid, nrow=n_imgs_per_row)
+        return denoise_grid
+
+    def configure_optimizers(self):
+        lr = self.learning_rate
+        params = list(self.model.parameters())
+        if self.learn_logvar:
+            params = params + [self.logvar]
+        opt = torch.optim.AdamW(params, lr=lr)
+        return opt
+
+    def get_loss(self, pred, target, mean=True, mask=None):
+        if self.loss_type == 'l1':
+            loss = (target - pred).abs()
+            if mean:
+                loss = loss.mean()
+        elif self.loss_type == 'l2':
+            if mean:
+                loss = torch.nn.functional.mse_loss(target, pred)
+            else:
+                loss = torch.nn.functional.mse_loss(target, pred, reduction='none')
+        else:
+            raise NotImplementedError("unknown loss type '{loss_type}'")
+        if mask is not None:
+            assert(mean is False)
+            assert(loss.shape[2:] == mask.shape[2:]) #thw need be the same
+            loss = loss * mask
+        return loss
+
+    def p_losses(self, x_start, t, noise=None):
+        noise = default(noise, lambda: torch.randn_like(x_start))
+        x_noisy = self.q_sample(x_start=x_start, t=t.long(), noise=noise)
+        model_out = self.model(x_noisy, t)
+
+        loss_dict = {}
+        if self.parameterization == "eps":
+            target = noise
+        elif self.parameterization == "x0":
+            target = x_start
+        else:
+            raise NotImplementedError(f"Paramterization {self.parameterization} not yet supported")
+
+        loss = self.get_loss(model_out, target, mean=False).mean(dim=[1, 2, 3, 4])
+
+        log_prefix = 'train' if self.training else 'val'
+
+        loss_dict.update({f'{log_prefix}/loss_simple': loss.mean()})
+        loss_simple = loss.mean() * self.l_simple_weight
+
+        loss_vlb = (self.lvlb_weights[t] * loss).mean()
+        loss_dict.update({f'{log_prefix}/loss_vlb': loss_vlb})
+
+        loss = loss_simple + self.original_elbo_weight * loss_vlb
+
+        loss_dict.update({f'{log_prefix}/loss': loss})
+
+        return loss, loss_dict
+
+    def forward(self, x, *args, **kwargs):
+        t = torch.randint(0, self.num_timesteps, (x.shape[0],), device=self.device).long()
+        return self.p_losses(x, t, *args, **kwargs)
 
 
 class LatentDiffusion(DDPM):
@@ -656,6 +791,137 @@ class LatentDiffusion(DDPM):
             return img, intermediates
         return img
 
+    @torch.no_grad()
+    def get_condition(self, batch, x, bs, force_c_encode, k, cond_key):
+        is_conditional = self.model.conditioning_key is not None # crossattn
+        if is_conditional:
+            if cond_key is None:
+                cond_key = self.cond_stage_key 
+            
+            # get condition batch of different condition type
+            if cond_key != self.first_stage_key:
+                if cond_key in ['caption', 'txt']:
+                    xc = batch[cond_key]
+                elif cond_key == 'class_label':
+                    xc = batch
+                else:
+                    raise NotImplementedError
+            else:
+                xc = x
+            
+            # get learned condition.
+            # can directly skip it: c = xc
+            if self.cond_stage_config is not None and (not self.cond_stage_trainable or force_c_encode):
+                if isinstance(xc, torch.Tensor):
+                    xc = xc.to(self.device)
+                c = self.get_learned_conditioning(xc)
+            else:
+                c = xc
+
+            # process c
+            if bs is not None:
+                c = c[:bs]
+
+        else:
+            c = None
+            xc = None
+            
+        return c, xc
+
+    @torch.no_grad()
+    def get_input(self, batch, k, return_first_stage_outputs=False, force_c_encode=False,
+                  cond_key=None, return_original_cond=False, bs=None):
+        # get input imgaes
+        x = super().get_input(batch, k) # k=first_stage_key
+
+        if bs is not None:
+            x = x[:bs]
+        
+        x = x.to(self.device)
+        x_ori = x
+        b, _, t, h, w = x.shape
+        
+        # TODO: check input encoder_type. Seems Always 3d?????
+        # encode video frames x to z via a 2D encoder
+        if self.encoder_type == "2d":
+            x = rearrange(x, 'b c t h w -> (b t) c h w')
+        encoder_posterior = self.encode_first_stage(x)
+        z = self.get_first_stage_encoding(encoder_posterior).detach()
+        if self.encoder_type == "2d":
+            z = rearrange(z, '(b t) c h w -> b c t h w', b=b, t=t)
+        
+        # if self.latent_frame_strde:
+        #     z = z[:, :, ::4, :, :]
+        #     assert(z.shape[2] == self.temporal_length), f'z={z.shape}, self.temporal_length={self.temporal_length}'
+        
+        c, xc = self.get_condition(batch, x, bs, force_c_encode, k, cond_key)
+        out = [z, c]
+        
+        if return_first_stage_outputs:
+            xrec = self.decode_first_stage(z)
+            out.extend([x_ori, xrec])
+        if return_original_cond:
+            if isinstance(xc, torch.Tensor) and xc.dim() == 4:
+                xc = rearrange(xc, '(b t) c h w -> b c t h w', b=b, t=t)
+            out.append(xc)
+        
+        return out
+
+    def shared_step(self, batch, **kwargs):
+        """ shared step of LDM.
+        If learned condition, c is raw condition (e.g. text)
+        Encoding condition is performed in below forward function.
+        """
+        x, c = self.get_input(batch, self.first_stage_key)
+        loss = self(x, c)
+        return loss
+    
+    def p_losses(self, x_start, cond, t, noise=None, skip_qsample=False, x_noisy=None, cond_mask=None, **kwargs,):
+        if not skip_qsample:
+            noise = default(noise, lambda: torch.randn_like(x_start))
+            x_noisy = self.q_sample(x_start=x_start, t=t.long(), noise=noise)
+        else:
+            assert(x_noisy is not None)
+            assert(noise is not None)
+        model_output = self.apply_model(x_noisy, t, cond, **kwargs)
+
+        loss_dict = {}
+        prefix = 'train' if self.training else 'val'
+
+        if self.parameterization == "x0":
+            target = x_start
+        elif self.parameterization == "eps":
+            target = noise
+        else:
+            raise NotImplementedError()
+        
+        loss_simple = self.get_loss(model_output, target, mean=False).mean([1, 2, 3, 4])
+        loss_dict.update({f'{prefix}/loss_simple': loss_simple.mean()})
+        if self.logvar.device != self.device:
+            self.logvar = self.logvar.to(self.device)
+        logvar_t = self.logvar[t]
+        loss = loss_simple / torch.exp(logvar_t) + logvar_t
+        if self.learn_logvar:
+            loss_dict.update({f'{prefix}/loss_gamma': loss.mean()})
+            loss_dict.update({'logvar': self.logvar.data.mean()})
+
+        loss = self.l_simple_weight * loss.mean()
+
+        loss_vlb = self.get_loss(model_output, target, mean=False).mean(dim=(1, 2, 3, 4))
+        loss_vlb = (self.lvlb_weights[t] * loss_vlb).mean()
+        loss_dict.update({f'{prefix}/loss_vlb': loss_vlb})
+        loss += (self.original_elbo_weight * loss_vlb)
+        loss_dict.update({f'{prefix}/loss': loss})
+
+        return loss, loss_dict
+
+    def forward(self, x, c, *args, **kwargs):
+        t = torch.randint(0, self.num_timesteps, (x.shape[0],), device=self.device).long()
+        if self.model.conditioning_key is not None:
+            assert c is not None
+            if self.cond_stage_trainable:
+                c = self.get_learned_conditioning(c)
+        return self.p_losses(x, c, t, *args, **kwargs)
 
 class LatentVisualDiffusion(LatentDiffusion):
     def __init__(self, cond_img_config, finegrained=False, random_cond=False, *args, **kwargs):
