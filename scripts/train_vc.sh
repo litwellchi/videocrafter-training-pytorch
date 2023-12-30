@@ -1,14 +1,14 @@
 
 PROJ_ROOT="./"                      # root directory for saving experiment logs
-EXPNAME="lvdm_short_taichi"          # experiment name 
+EXPNAME="webvid_short_taichi"          # experiment name 
 # DATADIR="/dataset/sky_timelapse"  # dataset directory
-DATADIR="/mnt/data/chixiaowei/taichi/freeguy"  # dataset directory
-AEPATH="models/lvdm_short/short_taichi.ckpt"    # pretrained video autoencoder checkpoint
+DATADIR="/mnt/data/chixiaowei/webvid_test/"  # dataset directory
+# AEPATH="models/lvdm_short/short_taihi.ckpt"    # pretrained video autoencoder checkpoint
 # AEPATH="models/ae/ae_sky.ckpt"    # pretrained video autoencoder checkpoint
 
 # CONFIG="configs/lvdm_short/sky.yaml"
 # OR CONFIG="configs/videoae/ucf.yaml"
-CONFIG="configs/lvdm_short/taichi.yaml"
+CONFIG="configs/train_t2v_512_v1.0.yaml"
 
 # run
 export TOKENIZERS_PARALLELISM=false
@@ -21,7 +21,7 @@ python train_main.py \
 lightning.trainer.num_nodes=1 \
 data.params.train.params.data_root=$DATADIR \
 data.params.validation.params.data_root=$DATADIR \
-model.params.first_stage_config.params.ckpt_path=$AEPATH
+# model.params.first_stage_config.params.ckpt_path=$AEPATH
 
 # -------------------------------------------------------------------------------------------------
 # commands for multi nodes training
