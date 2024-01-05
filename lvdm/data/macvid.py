@@ -53,7 +53,7 @@ class MaCVid(Dataset):
         metadata_path = os.path.join(data_folder,'metadata_catpion.json')
         with open(metadata_path, 'r') as f:
             self.videos = json.load(f)
-        self.videos = [item for item in self.videos if item['basic']["clip_duration"] > 1.0 ]
+        self.videos = [item for item in self.videos if item['basic']["clip_duration"] > 20.0 ]
         print(f'Number of videos = {len(self.videos)}')
 
     def __getitem__(self, index):
@@ -85,7 +85,7 @@ class MaCVid(Dataset):
         frames = torch.tensor(frames.asnumpy()).permute(3, 0, 1, 2).float() # [t,h,w,c] -> [c,t,h,w]
         assert(frames.shape[2] == self.resolution[0] and frames.shape[3] == self.resolution[1]), f'frames={frames.shape}, self.resolution={self.resolution}'
         frames = (frames / 255 - 0.5) * 2
-        data = {'video': frames, 'caption':self.videos.loc[index]['name']}
+        data = {'video': frames, 'caption':self.videos[index]["misc"]['frame_caption'][0]}
         return data
     
     def __len__(self):
