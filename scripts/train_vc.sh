@@ -1,6 +1,6 @@
 
 PROJ_ROOT="./"                      # root directory for saving experiment logs
-EXPNAME="webvid_short_taichi"          # experiment name 
+EXPNAME="cv_macvid"          # experiment name 
 # DATADIR="/dataset/sky_timelapse"  # dataset directory
 DATADIR="/mnt/data/chixiaowei/webvid_test/"  # dataset directory
 # AEPATH="models/lvdm_short/short_taihi.ckpt"    # pretrained video autoencoder checkpoint
@@ -14,13 +14,13 @@ CONFIG="configs/train_t2v_512_v1.0.yaml"
 export TOKENIZERS_PARALLELISM=false
 python train_main.py \
 --base $CONFIG \
--t --gpus 1, \
+-t --gpus '0,1,2,3,4,5,6,7', \
 --name $EXPNAME \
 --logdir $PROJ_ROOT \
 --auto_resume True \
 lightning.trainer.num_nodes=1 \
-data.params.train.params.data_root=$DATADIR \
-data.params.validation.params.data_root=$DATADIR \
+# data.params.train.params.data_root=$DATADIR \
+# data.params.validation.params.data_root=$DATADIR \
 # model.params.first_stage_config.params.ckpt_path=$AEPATH
 
 # -------------------------------------------------------------------------------------------------

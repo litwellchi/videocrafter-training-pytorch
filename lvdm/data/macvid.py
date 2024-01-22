@@ -53,7 +53,7 @@ class MaCVid(Dataset):
         metadata_path = os.path.join(data_folder,'metadata_catpion.json')
         with open(metadata_path, 'r') as f:
             self.videos = json.load(f)
-        self.videos = [item for item in self.videos if item['basic']["clip_duration"] > 20.0 ]
+        self.videos = [item for item in self.videos if item['basic']["clip_duration"] > 5.0 ]
         print(f'Number of videos = {len(self.videos)}')
 
     def __getitem__(self, index):

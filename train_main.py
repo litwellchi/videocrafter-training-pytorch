@@ -474,7 +474,9 @@ if __name__ == "__main__":
         if trainer.global_rank == 0:
             print("Summoning checkpoint.")
             ckpt_path = os.path.join(ckptdir, "last_summoning.ckpt")
+            print(ckpt_path)
             trainer.save_checkpoint(ckpt_path)
+            print("Summoning checkpoint success.")            
 
     def divein(*args, **kwargs):
         if trainer.global_rank == 0:
@@ -489,7 +491,8 @@ if __name__ == "__main__":
     if opt.train:
         try:
             trainer.fit(model, data)
-        except Exception:
+        except Exception as e:
+            print(f"error message: {e}")
             melk()
             raise
     if opt.val:
