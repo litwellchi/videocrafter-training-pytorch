@@ -1,5 +1,5 @@
-##
-这玩意就是VideoCrafter但我们要努力改成不是videocrafter换发新荣光
+## 这玩意就是VideoCrafter但我们要努力改成不是videocrafter
+焕发HKUST新荣光
 
 
 ## 🤗 Acknowledgements
