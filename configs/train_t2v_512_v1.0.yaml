@@ -87,9 +87,10 @@ data:
     num_workers: 16
     wrap: false
     train:
-      target: lvdm.data.macvid.MaCVid
+      target: lvdm.data.webvid.WebVid
+      # target: lvdm.data.macvid.MaCVid
       params:
-        data_root: /data/shared_zipdata/group_1_clips
+        data_root: /aifs4su/mmdata/rawdata/videogen/webvid_eval/data
         resolution: 256
         video_length: 16
         # dataset_name: webvid
@@ -97,9 +98,10 @@ data:
         # spatial_transform: center_crop_resize
         # temporal_transform: rand_clips
     validation:
-      target: lvdm.data.macvid.MaCVid
+      target: lvdm.data.webvid.WebVid
+      # target: lvdm.data.macvid.MaCVid
       params:
-        data_root: /data/shared_zipdata/group_1_clips
+        data_root: /aifs4su/mmdata/rawdata/videogen/webvid_eval/data
         resolution: 256
         video_length: 16
         # dataset_name: webvid

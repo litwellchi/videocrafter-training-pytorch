@@ -494,7 +494,7 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"error message: {e}")
             melk()
-            raise
+            # raise
     if opt.val:
         trainer.validate(model, data)
     if opt.test or (not opt.no_test and not trainer.interrupted):
