@@ -55,13 +55,14 @@ def run_inference(args, gpu_num, gpu_no, **kwargs):
     config = OmegaConf.load(args.config)
     #data_config = config.pop("data", OmegaConf.create())
     model_config = config.pop("model", OmegaConf.create())
+    print(f"torch.cuda.is_available():{torch.cuda.is_available()}")
     model = instantiate_from_config(model_config)
     model = model.cuda(gpu_no)
     assert os.path.exists(args.ckpt_path), f"Error: checkpoint [{args.ckpt_path}] Not Found!"
     model = load_model_checkpoint(model, args.ckpt_path)
     model.eval()
     count_parameters(model)
-    exit(0)
+    # exit(0)
 
     ## sample shape
     assert (args.height % 16 == 0) and (args.width % 16 == 0), "Error: image size [h,w] should be multiples of 16!"
