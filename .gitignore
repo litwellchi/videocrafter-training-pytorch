@@ -8,5 +8,9 @@ checkpoints
 results
 test_demo
 ckpts
-vc_webvid
+cv_webvid
 cv_macvid
+overfit_macvid
+torch_lightning_error.txt
+torch_lightning_output.txt
+logs

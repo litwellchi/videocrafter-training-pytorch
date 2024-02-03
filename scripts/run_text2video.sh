@@ -1,5 +1,6 @@
 name="base_1024_test"
 
+conda activate videocrafter
 ckpt='ckpts/Text2Video576x1024/model.ckpt'
 config='configs/inference_t2v_1024_v1.0.yaml'
 

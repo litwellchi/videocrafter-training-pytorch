@@ -254,6 +254,7 @@ if __name__ == "__main__":
         config.model.load_from_checkpoint = opt.load_from_checkpoint
     if "load_from_checkpoint" in config.model and config.model.load_from_checkpoint and not resume:
         try:
+            print(f"load checkpoint from {opt.load_from_checkpoint}")
             model = model.load_from_checkpoint(config.model.load_from_checkpoint, **config.model.params)
         except:
             # avoid size mismatch

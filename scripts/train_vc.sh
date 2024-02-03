@@ -3,23 +3,25 @@ PROJ_ROOT="./"                      # root directory for saving experiment logs
 # EXPNAME="cv_macvid"          # experiment name 
 EXPNAME="cv_webvid"          # experiment name 
 # DATADIR="/dataset/sky_timelapse"  # dataset directory
-DATADIR="/aifs4su/mmdata/rawdata/videogen/webvid_eval/data"  # dataset directory
+DATADIR="/aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85"  # dataset directory
 # AEPATH="models/lvdm_short/short_taihi.ckpt"    # pretrained video autoencoder checkpoint
 # AEPATH="models/ae/ae_sky.ckpt"    # pretrained video autoencoder checkpoint
 
 # CONFIG="configs/lvdm_short/sky.yaml"
 # OR CONFIG="configs/videoae/ucf.yaml"
-CONFIG="configs/train_t2v_512_v1.0.yaml"
-
+CONFIG="configs/train_t2v_1024_v1.0.yaml"
+CKPT_RESUME="/aifs4su/mmcode/videogen/share_ckpts/VideoCrafter/Text2Video-1024/model.ckpt"
 # run
 export TOKENIZERS_PARALLELISM=false
 python train_main.py \
 --base $CONFIG \
--t --gpus '0,1', \
+-t --gpus '1,2', \
+# -t --gpus '0,1,2,3,4,5,6,7', \
 --name $EXPNAME \
 --logdir $PROJ_ROOT \
 --auto_resume True \
 lightning.trainer.num_nodes=1 \
+--load_from_checkpoint $CKPT_RESUME 
 # data.params.train.params.data_root=$DATADIR \
 # data.params.validation.params.data_root=$DATADIR \
 # model.params.first_stage_config.params.ckpt_path=$AEPATH

@@ -53,14 +53,14 @@ class MaCVid(Dataset):
         metadata_path = os.path.join(data_folder,'metadata_catpion.json')
         with open(metadata_path, 'r') as f:
             self.videos = json.load(f)
-        self.videos = [item for item in self.videos if item['basic']["clip_duration"] > 5.0 ]
+        self.videos = [item for item in self.videos if item['basic']["clip_duration"] > 1.0 ]
         print(f'Number of videos = {len(self.videos)}')
 
     def __getitem__(self, index):
         while True:
             # video_path = os.path.join(self.data_root, f"videos/{self.videos.loc[index]['page_dir']}") + f"/{self.videos.loc[index]['videoid']}.mp4"
             # video_path = os.path.join(self.data_root, '.'+self.videos[index]['basic']['clip_path'])
-            video_path = os.path.join(self.data_root, '.'+self.videos[index]['basic']['clip_path'])
+            video_path = os.path.join(self.data_root, self.videos[index]['basic']['clip_path'])
             try:
                 video_reader = VideoReader(video_path, ctx=cpu(0), width=self.resolution[1], height=self.resolution[0])
                 if len(video_reader) < self.video_length:
