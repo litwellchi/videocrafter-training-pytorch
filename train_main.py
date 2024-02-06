@@ -13,6 +13,8 @@ from pytorch_lightning import seed_everything
 from pytorch_lightning.trainer import Trainer
 
 from pytorch_lightning.plugins import DDPPlugin
+from pytorch_lightning.plugins.environments import SLURMEnvironment
+import signal
 
 from lvdm.utils.common_utils import instantiate_from_config, str2bool
 from lvdm.utils.log import set_ptl_logger
@@ -45,6 +47,7 @@ def get_parser(**parser_kwargs):
     parser.add_argument("--increase_log_steps", type=str2bool, nargs="?", const=True, default=True, help="")
     parser.add_argument("--auto_resume", type=str2bool, nargs="?", const=False, default=False, help="")
     parser.add_argument("--wandb", type=str2bool, nargs="?", const=True, default=True, help="")
+    parser.add_argument("--signhup", type=str2bool, nargs="?", const=True, default=True, help="")
     parser.add_argument("--load_from_checkpoint", type=str, default="", help="")
     return parser
 
@@ -428,6 +431,9 @@ if __name__ == "__main__":
         print('low version ptl, no ddp shared')
         find_unused_parameters=lightning_config.get("find_unused_parameters", False)
         trainer_kwargs["plugins"] = DDPPlugin(find_unused_parameters=find_unused_parameters)
+        
+    if opt.signhup:
+        trainer_kwargs["plugins"] = [SLURMEnvironment(requeue_signal=signal.SIGHUP)]
 
     trainer = Trainer.from_argparse_args(trainer_opt, **trainer_kwargs)
     trainer.logdir = logdir

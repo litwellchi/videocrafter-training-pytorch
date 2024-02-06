@@ -14,3 +14,5 @@ overfit_macvid
 torch_lightning_error.txt
 torch_lightning_output.txt
 logs
+srun_output
+test_macvid*
