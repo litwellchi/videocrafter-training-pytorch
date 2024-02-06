@@ -15,11 +15,12 @@ CKPT_RESUME="/aifs4su/mmcode/videogen/share_ckpts/VideoCrafter/Text2Video-1024/m
 export TOKENIZERS_PARALLELISM=false
 python train_main.py \
 --base $CONFIG \
--t --gpus '1,2', \
+-t --gpus '0,1,2,3,5,6', \
 # -t --gpus '0,1,2,3,4,5,6,7', \
 --name $EXPNAME \
 --logdir $PROJ_ROOT \
 --auto_resume True \
+--wandb True \
 lightning.trainer.num_nodes=1 \
 --load_from_checkpoint $CKPT_RESUME 
 # data.params.train.params.data_root=$DATADIR \

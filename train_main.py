@@ -44,6 +44,7 @@ def get_parser(**parser_kwargs):
     parser.add_argument("--scale_lr", type=str2bool, nargs="?", const=True, default=True, help="scale base-lr by ngpu * batch_size * n_accumulate")
     parser.add_argument("--increase_log_steps", type=str2bool, nargs="?", const=True, default=True, help="")
     parser.add_argument("--auto_resume", type=str2bool, nargs="?", const=False, default=False, help="")
+    parser.add_argument("--wandb", type=str2bool, nargs="?", const=True, default=True, help="")
     parser.add_argument("--load_from_checkpoint", type=str, default="", help="")
     return parser
 
@@ -148,7 +149,6 @@ if __name__ == "__main__":
     parser = get_parser()
     parser = Trainer.add_argparse_args(parser)
     opt, unknown = parser.parse_known_args()
-
     # add cwd for convenience and to make classes in this file available when
     # running as `python main.py`
     # (in particular `main.DataModuleFromConfig`)
@@ -279,7 +279,8 @@ if __name__ == "__main__":
             "params": {
                 "name": nowname,
                 "save_dir": logdir,
-                "offline": opt.debug,
+                "project": "macvideo_gen",
+                # "offline": opt.debug,
                 "id": nowname,
             }
         },
@@ -293,7 +294,11 @@ if __name__ == "__main__":
             }
         },
     }
-    default_logger_cfg = default_logger_cfgs["testtube"]
+    if opt.wandb:
+        print("Using Wandb")
+        default_logger_cfg = default_logger_cfgs["wandb"]
+    else:
+        default_logger_cfg = default_logger_cfgs["testtube"]
     if "logger" in lightning_config:
         logger_cfg = lightning_config.logger
     else:
@@ -315,7 +320,8 @@ if __name__ == "__main__":
     if hasattr(model, "monitor"):
         print(f"Monitoring {model.monitor} as checkpoint metric.")
         default_modelckpt_cfg["params"]["monitor"] = model.monitor
-        default_modelckpt_cfg["params"]["save_top_k"] = 3
+        default_modelckpt_cfg["params"]["save_top_k"] = -1
+        default_modelckpt_cfg["params"]["every_n_epochs"] = 1
 
     if "modelcheckpoint" in lightning_config:
         modelckpt_cfg = lightning_config.modelcheckpoint

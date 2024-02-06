@@ -4,7 +4,7 @@
 #SBATCH --error=torch_lightning_error.txt
 #SBATCH --partition=debug
 #SBATCH --nodes=2
-#SBATCH --nodelist=dgx-124,dgx-123
+#SBATCH --nodelist=dgx-124,dgx-125
 #SBATCH --ntasks-per-node=8
 #SBATCH --cpus-per-task=4
 #SBATCH --gres=gpu:8
@@ -36,7 +36,7 @@ export CUDA_DEVICE_MAX_CONNECTIONS=10 \
 export OMP_NUM_THREADS=10 \
 
 PROJ_ROOT="./"                      # root directory for saving experiment logs
-EXPNAME="overfit_macvid"          # experiment name 
+EXPNAME="overfit_macvid_1"          # experiment name 
 DATADIR="/aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85"  # dataset directory
 CONFIG="configs/train_t2v_1024_v1.0.yaml"
 CKPT_RESUME="/aifs4su/mmcode/videogen/share_ckpts/VideoCrafter/Text2Video-1024/model.ckpt"
@@ -52,5 +52,6 @@ srun python train_main.py \
 --logdir $PROJ_ROOT \
 --auto_resume True \
 lightning.trainer.num_nodes=2 \
+--scale_lr False \
 --load_from_checkpoint $CKPT_RESUME 
 # srun scripts/train_vc.sh

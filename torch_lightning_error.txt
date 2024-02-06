@@ -1,80 +1,87 @@
+[rank: 1] Global seed set to 23
+[rank: 2] Global seed set to 23
+[rank: 7] Global seed set to 23
+[rank: 4] Global seed set to 23
+[rank: 3] Global seed set to 23
+[rank: 6] Global seed set to 23
+[rank: 5] Global seed set to 23
+[rank: 0] Global seed set to 23
+[rank: 8] Global seed set to 23
+[rank: 9] Global seed set to 23
+[rank: 10] Global seed set to 23
 [rank: 12] Global seed set to 23
 [rank: 13] Global seed set to 23
 [rank: 15] Global seed set to 23
 [rank: 11] Global seed set to 23
-[rank: 9] Global seed set to 23
 [rank: 14] Global seed set to 23
-[rank: 10] Global seed set to 23
 [rank: 8] Global seed set to 23
-[rank: 5] Global seed set to 23
-[rank: 2] Global seed set to 23
-[rank: 4] Global seed set to 23
-[rank: 6] Global seed set to 23
-[rank: 3] Global seed set to 23
-[rank: 1] Global seed set to 23
-[rank: 7] Global seed set to 23
-[rank: 0] Global seed set to 23
-[rank: 12] Global seed set to 23
-Initializing distributed: GLOBAL_RANK: 12, MEMBER: 13/16
-[rank: 11] Global seed set to 23
-Initializing distributed: GLOBAL_RANK: 11, MEMBER: 12/16
-[rank: 14] Global seed set to 23
-Initializing distributed: GLOBAL_RANK: 14, MEMBER: 15/16
-[rank: 13] Global seed set to 23
-Initializing distributed: GLOBAL_RANK: 13, MEMBER: 14/16
+Initializing distributed: GLOBAL_RANK: 8, MEMBER: 9/16
 [rank: 9] Global seed set to 23
 Initializing distributed: GLOBAL_RANK: 9, MEMBER: 10/16
+[rank: 14] Global seed set to 23
+Initializing distributed: GLOBAL_RANK: 14, MEMBER: 15/16
 [rank: 10] Global seed set to 23
 Initializing distributed: GLOBAL_RANK: 10, MEMBER: 11/16
 [rank: 15] Global seed set to 23
 Initializing distributed: GLOBAL_RANK: 15, MEMBER: 16/16
-[rank: 8] Global seed set to 23
-Initializing distributed: GLOBAL_RANK: 8, MEMBER: 9/16
+[rank: 11] Global seed set to 23
+Initializing distributed: GLOBAL_RANK: 11, MEMBER: 12/16
+[rank: 12] Global seed set to 23
+Initializing distributed: GLOBAL_RANK: 12, MEMBER: 13/16
+[rank: 13] Global seed set to 23
+Initializing distributed: GLOBAL_RANK: 13, MEMBER: 14/16
 [rank: 2] Global seed set to 23
 Initializing distributed: GLOBAL_RANK: 2, MEMBER: 3/16
-[rank: 1] Global seed set to 23
-Initializing distributed: GLOBAL_RANK: 1, MEMBER: 2/16
 [rank: 5] Global seed set to 23
 Initializing distributed: GLOBAL_RANK: 5, MEMBER: 6/16
-/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/utilities/distributed.py:258: LightningDeprecationWarning: `pytorch_lightning.utilities.distributed.rank_zero_only` has been deprecated in v1.8.1 and will be removed in v1.10.0. You can import it from `pytorch_lightning.utilities` instead.
-  rank_zero_deprecation(
-/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/accelerator_connector.py:446: LightningDeprecationWarning: Setting `Trainer(gpus='0,1,2,3,4,5,6,7,')` is deprecated in v1.7 and will be removed in v2.0. Please use `Trainer(accelerator='gpu', devices='0,1,2,3,4,5,6,7,')` instead.
-  rank_zero_deprecation(
-GPU available: True (cuda), used: True
-[rank: 3] Global seed set to 23
-Initializing distributed: GLOBAL_RANK: 3, MEMBER: 4/16
-TPU available: False, using: 0 TPU cores
-IPU available: False, using: 0 IPUs
-HPU available: False, using: 0 HPUs
-[rank: 0] Global seed set to 23
-Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/16
 [rank: 4] Global seed set to 23
 Initializing distributed: GLOBAL_RANK: 4, MEMBER: 5/16
 [rank: 6] Global seed set to 23
 Initializing distributed: GLOBAL_RANK: 6, MEMBER: 7/16
+/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/utilities/distributed.py:258: LightningDeprecationWarning: `pytorch_lightning.utilities.distributed.rank_zero_only` has been deprecated in v1.8.1 and will be removed in v1.10.0. You can import it from `pytorch_lightning.utilities` instead.
+  rank_zero_deprecation(
+/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/accelerator_connector.py:446: LightningDeprecationWarning: Setting `Trainer(gpus='0,1,2,3,4,5,6,7,')` is deprecated in v1.7 and will be removed in v2.0. Please use `Trainer(accelerator='gpu', devices='0,1,2,3,4,5,6,7,')` instead.
+  rank_zero_deprecation(
+/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/checkpoint_connector.py:55: LightningDeprecationWarning: Setting `Trainer(resume_from_checkpoint=)` is deprecated in v1.5 and will be removed in v2.0. Please pass `Trainer.fit(ckpt_path=)` directly instead.
+  rank_zero_deprecation(
+GPU available: True (cuda), used: True
+[rank: 1] Global seed set to 23
+Initializing distributed: GLOBAL_RANK: 1, MEMBER: 2/16
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+HPU available: False, using: 0 HPUs
 [rank: 7] Global seed set to 23
 Initializing distributed: GLOBAL_RANK: 7, MEMBER: 8/16
+[rank: 3] Global seed set to 23
+Initializing distributed: GLOBAL_RANK: 3, MEMBER: 4/16
+/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/trainer/trainer.py:1871: LightningDeprecationWarning: `trainer.resume_from_checkpoint` is deprecated in v1.5 and will be removed in v2.0. Specify the fit checkpoint path with `trainer.fit(ckpt_path=)` instead.
+  rank_zero_deprecation(
+[rank: 0] Global seed set to 23
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/16
 ----------------------------------------------------------------------------------------------------
 distributed_backend=nccl
 All distributed processes registered. Starting with 16 processes
 ----------------------------------------------------------------------------------------------------
 
+/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/callbacks/model_checkpoint.py:604: UserWarning: Checkpoint directory ./overfit_macvid/checkpoints exists and is not empty.
+  rank_zero_warn(f"Checkpoint directory {dirpath} exists and is not empty.")
+Restoring states from the checkpoint path at ./overfit_macvid/checkpoints/last.ckpt
 LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
-LOCAL_RANK: 2 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
-LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
-LOCAL_RANK: 3 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
-LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+LOCAL_RANK: 7 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+LOCAL_RANK: 6 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+LOCAL_RANK: 5 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
 LOCAL_RANK: 4 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
 LOCAL_RANK: 2 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
-LOCAL_RANK: 5 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
 LOCAL_RANK: 3 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
-LOCAL_RANK: 6 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
-LOCAL_RANK: 4 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
-LOCAL_RANK: 7 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
-LOCAL_RANK: 5 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
 LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
-LOCAL_RANK: 6 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
 LOCAL_RANK: 7 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+LOCAL_RANK: 6 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+LOCAL_RANK: 5 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+LOCAL_RANK: 4 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+LOCAL_RANK: 3 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+LOCAL_RANK: 2 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
 
   | Name              | Type                   | Params
 -------------------------------------------------------------
@@ -86,6 +93,7 @@ LOCAL_RANK: 7 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
 437 M     Non-trainable params
 1.6 B     Total params
 6,336.892 Total estimated model params size (MB)
+Restored all states from the checkpoint file at ./overfit_macvid/checkpoints/last.ckpt
 SLURM auto-requeueing enabled. Setting signal handlers.
 SLURM auto-requeueing enabled. Setting signal handlers.
 SLURM auto-requeueing enabled. Setting signal handlers.
@@ -102,15 +110,15 @@ SLURM auto-requeueing enabled. Setting signal handlers.
 SLURM auto-requeueing enabled. Setting signal handlers.
 SLURM auto-requeueing enabled. Setting signal handlers.
 SLURM auto-requeueing enabled. Setting signal handlers.
-[02:37:25] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000015.mp4, No such file or directory
-[02:37:27] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zw9vQctOYH4_0000078.mp4, No such file or directory
-[02:37:28] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvTxAShSH_U_0000002.mp4, No such file or directory
-[02:37:30] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000017.mp4, No such file or directory
-[02:37:30] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zyscRpM7c9E_0000018.mp4, No such file or directory
-[02:37:33] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zw9vQctOYH4_0000075.mp4, No such file or directory
-[02:37:34] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zyscRpM7c9E_0000017.mp4, No such file or directory
-[02:37:36] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zyscRpM7c9E_0000016.mp4, No such file or directory
-[02:37:39] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000018.mp4, No such file or directory
+[21:49:45] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000015.mp4, No such file or directory
+[21:49:46] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zw9vQctOYH4_0000078.mp4, No such file or directory
+[21:49:47] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000017.mp4, No such file or directory
+[21:49:49] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zyscRpM7c9E_0000018.mp4, No such file or directory
+[21:49:51] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvTxAShSH_U_0000002.mp4, No such file or directory
+[21:49:52] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zw9vQctOYH4_0000075.mp4, No such file or directory
+[21:49:57] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zyscRpM7c9E_0000017.mp4, No such file or directory
+[21:49:58] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zyscRpM7c9E_0000016.mp4, No such file or directory
+[21:49:59] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000018.mp4, No such file or directory
 /aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/torch/utils/checkpoint.py:460: UserWarning: torch.utils.checkpoint: please pass in use_reentrant=True or use_reentrant=False explicitly. The default value of use_reentrant will be updated to be False in the future. To maintain current behavior, pass use_reentrant=True. It is recommended that you use use_reentrant=False. Refer to docs for more details on the differences between the two variants.
   warnings.warn(
 /aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/torch/utils/checkpoint.py:90: UserWarning: None of the inputs have requires_grad=True. Gradients will be None
@@ -125,10 +133,6 @@ SLURM auto-requeueing enabled. Setting signal handlers.
   warning_cache.warn(
 /aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:537: PossibleUserWarning: It is recommended to use `self.log('val/loss_simple_ema', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
   warning_cache.warn(
-/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/torch/utils/checkpoint.py:460: UserWarning: torch.utils.checkpoint: please pass in use_reentrant=True or use_reentrant=False explicitly. The default value of use_reentrant will be updated to be False in the future. To maintain current behavior, pass use_reentrant=True. It is recommended that you use use_reentrant=False. Refer to docs for more details on the differences between the two variants.
-  warnings.warn(
-/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/torch/utils/checkpoint.py:90: UserWarning: None of the inputs have requires_grad=True. Gradients will be None
-  warnings.warn(
 /aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:537: PossibleUserWarning: It is recommended to use `self.log('val/loss_vlb_ema', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
   warning_cache.warn(
 /aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:537: PossibleUserWarning: It is recommended to use `self.log('val/loss_ema', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
@@ -189,16 +193,127 @@ SLURM auto-requeueing enabled. Setting signal handlers.
   warnings.warn(
 /aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/torch/utils/checkpoint.py:90: UserWarning: None of the inputs have requires_grad=True. Gradients will be None
   warnings.warn(
-[02:37:52] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zyscRpM7c9E_0000017.mp4, No such file or directory
-[02:37:57] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvTxAShSH_U_0000002.mp4, No such file or directory
-[02:38:00] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000016.mp4, No such file or directory
-[02:38:00] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000015.mp4, No such file or directory
-[02:38:00] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000017.mp4, No such file or directory
-[02:38:01] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvTxAShSH_U_0000003.mp4, No such file or directory
-[02:38:02] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zw9vQctOYH4_0000077.mp4, No such file or directory
-[02:38:02] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zw9vQctOYH4_0000078.mp4, No such file or directory
-[02:38:02] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zyscRpM7c9E_0000018.mp4, No such file or directory
-[02:38:03] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zw9vQctOYH4_0000075.mp4, No such file or directory
-[02:38:18] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zyscRpM7c9E_0000016.mp4, No such file or directory
-[02:38:19] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000018.mp4, No such file or directory
-[02:38:57] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvTxAShSH_U_0000001.mp4, No such file or directory
+/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/torch/utils/checkpoint.py:460: UserWarning: torch.utils.checkpoint: please pass in use_reentrant=True or use_reentrant=False explicitly. The default value of use_reentrant will be updated to be False in the future. To maintain current behavior, pass use_reentrant=True. It is recommended that you use use_reentrant=False. Refer to docs for more details on the differences between the two variants.
+  warnings.warn(
+/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/torch/utils/checkpoint.py:90: UserWarning: None of the inputs have requires_grad=True. Gradients will be None
+  warnings.warn(
+[21:50:12] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zw9vQctOYH4_0000077.mp4, No such file or directory
+[21:50:13] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvTxAShSH_U_0000002.mp4, No such file or directory
+[21:50:15] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000018.mp4, No such file or directory
+[21:50:20] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvTxAShSH_U_0000003.mp4, No such file or directory
+[21:50:21] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zyscRpM7c9E_0000016.mp4, No such file or directory
+[21:50:22] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000015.mp4, No such file or directory
+[21:50:23] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zw9vQctOYH4_0000075.mp4, No such file or directory
+[21:50:23] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvTxAShSH_U_0000001.mp4, No such file or directory
+[21:50:31] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zyscRpM7c9E_0000017.mp4, No such file or directory
+[21:50:37] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000016.mp4, No such file or directory
+[21:50:43] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zw9vQctOYH4_0000078.mp4, No such file or directory
+[21:51:18] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000017.mp4, No such file or directory
+[21:51:21] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zyscRpM7c9E_0000018.mp4, No such file or directory
+/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:233: UserWarning: You called `self.log('global_step', ...)` in your `training_step` but the value needs to be floating point. Converting it to torch.float32.
+  warning_cache.warn(
+/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/utilities/data.py:85: UserWarning: Trying to infer the `batch_size` from an ambiguous collection. The batch size we found is 3. To avoid any miscalculations, use `self.log(..., batch_size=batch_size)`.
+  warning_cache.warn(
+[21:53:15] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000015.mp4, No such file or directory
+[21:53:16] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zw9vQctOYH4_0000078.mp4, No such file or directory
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+[21:53:17] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000017.mp4, No such file or directory
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+[21:53:21] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zyscRpM7c9E_0000018.mp4, No such file or directory
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+[21:53:23] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zw9vQctOYH4_0000075.mp4, No such file or directory
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+[21:53:23] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvTxAShSH_U_0000002.mp4, No such file or directory
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+[21:53:27] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000018.mp4, No such file or directory
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+[21:53:28] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zyscRpM7c9E_0000017.mp4, No such file or directory
+[21:53:28] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zyscRpM7c9E_0000016.mp4, No such file or directory
+[21:53:36] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvTxAShSH_U_0000001.mp4, No such file or directory
+[21:53:38] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zw9vQctOYH4_0000077.mp4, No such file or directory
+[21:53:47] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvTxAShSH_U_0000003.mp4, No such file or directory
+[21:53:55] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000016.mp4, No such file or directory
+[21:57:28] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000015.mp4, No such file or directory
+[21:57:29] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zw9vQctOYH4_0000075.mp4, No such file or directory
+[21:57:32] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000018.mp4, No such file or directory
+[21:57:37] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zyscRpM7c9E_0000017.mp4, No such file or directory
+/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:233: UserWarning: You called `self.log('train/epoch/idx', ...)` in your `training_epoch_end` but the value needs to be floating point. Converting it to torch.float32.
+  warning_cache.warn(
+/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:233: UserWarning: You called `self.log('train/epoch/time', ...)` in your `training_epoch_end` but the value needs to be floating point. Converting it to torch.float32.
+  warning_cache.warn(
+/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:233: UserWarning: You called `self.log('train/epoch/time_avg', ...)` in your `training_epoch_end` but the value needs to be floating point. Converting it to torch.float32.
+  warning_cache.warn(
+/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:537: PossibleUserWarning: It is recommended to use `self.log('train/loss_simple', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+  warning_cache.warn(
+/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:537: PossibleUserWarning: It is recommended to use `self.log('train/loss_vlb', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+  warning_cache.warn(
+/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:537: PossibleUserWarning: It is recommended to use `self.log('train/loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+  warning_cache.warn(
+/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:537: PossibleUserWarning: It is recommended to use `self.log('train/epoch/loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+  warning_cache.warn(
+/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:537: PossibleUserWarning: It is recommended to use `self.log('train/epoch/idx', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+  warning_cache.warn(
+/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:537: PossibleUserWarning: It is recommended to use `self.log('train/epoch/time', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+  warning_cache.warn(
+/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:537: PossibleUserWarning: It is recommended to use `self.log('train/epoch/time_avg', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+  warning_cache.warn(
+/aifs4su/mmcode/videogen/anaconda3/envs/videocrafter/lib/python3.8/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:537: PossibleUserWarning: It is recommended to use `self.log('train/epoch/time_avg_min', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+  warning_cache.warn(
+[21:58:04] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zw9vQctOYH4_0000078.mp4, No such file or directory
+[21:58:14] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zyscRpM7c9E_0000018.mp4, No such file or directory
+[21:58:26] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000016.mp4, No such file or directory
+[21:58:29] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvTxAShSH_U_0000003.mp4, No such file or directory
+[21:58:32] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvTxAShSH_U_0000001.mp4, No such file or directory
+[21:58:44] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvTxAShSH_U_0000002.mp4, No such file or directory
+[21:58:47] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zyscRpM7c9E_0000016.mp4, No such file or directory
+[21:58:53] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zw9vQctOYH4_0000077.mp4, No such file or directory
+[21:58:56] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000017.mp4, No such file or directory
+[22:00:45] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zw9vQctOYH4_0000078.mp4, No such file or directory
+[22:00:47] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000017.mp4, No such file or directory
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+[22:00:48] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000015.mp4, No such file or directory
+[22:00:48] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zyscRpM7c9E_0000018.mp4, No such file or directory
+[22:00:51] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvTxAShSH_U_0000002.mp4, No such file or directory
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+WARNING:root:ShardedDDP detected that the trainable params changed, either because of eval/train mode or parameter freezing/unfreeze.
+[22:00:56] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zyscRpM7c9E_0000017.mp4, No such file or directory
+[22:00:58] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zw9vQctOYH4_0000075.mp4, No such file or directory
+[22:00:59] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zyscRpM7c9E_0000016.mp4, No such file or directory
+[22:01:00] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000018.mp4, No such file or directory
+[22:01:05] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvTxAShSH_U_0000001.mp4, No such file or directory
+[22:01:07] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zw9vQctOYH4_0000077.mp4, No such file or directory
+[22:01:17] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvTxAShSH_U_0000003.mp4, No such file or directory
+[22:01:25] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000016.mp4, No such file or directory
+[22:04:16] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvTxAShSH_U_0000001.mp4, No such file or directory
+[22:04:17] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zw9vQctOYH4_0000077.mp4, No such file or directory
+[22:04:18] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000018.mp4, No such file or directory
+[22:04:22] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zw9vQctOYH4_0000078.mp4, No such file or directory
+[22:04:24] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zvweaacTsTI_0000015.mp4, No such file or directory
+[22:04:26] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zyscRpM7c9E_0000018.mp4, No such file or directory
+[22:04:26] /github/workspace/src/video/video_reader.cc:83: ERROR opening: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85/zw9vQctOYH4_0000075.mp4, No such file or directory
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** JOB 24516 ON dgx-123 CANCELLED AT 2024-02-04T22:04:53 ***
+slurmstepd: error: *** STEP 24516.1 ON dgx-123 CANCELLED AT 2024-02-04T22:04:53 ***
