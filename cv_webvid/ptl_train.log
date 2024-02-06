@@ -2,3 +2,33 @@
 02:32:45:INFO@setup.py:MainProcess - TPU available: False, using: 0 TPU cores
 02:32:45:INFO@setup.py:MainProcess - IPU available: False, using: 0 IPUs
 02:32:45:INFO@setup.py:MainProcess - HPU available: False, using: 0 HPUs
+04:11:46:INFO@setup.py:MainProcess - GPU available: True (cuda), used: True
+04:11:46:INFO@setup.py:MainProcess - TPU available: False, using: 0 TPU cores
+04:11:46:INFO@setup.py:MainProcess - IPU available: False, using: 0 IPUs
+04:11:46:INFO@setup.py:MainProcess - HPU available: False, using: 0 HPUs
+04:13:04:INFO@setup.py:MainProcess - GPU available: True (cuda), used: True
+04:13:04:INFO@setup.py:MainProcess - TPU available: False, using: 0 TPU cores
+04:13:04:INFO@setup.py:MainProcess - IPU available: False, using: 0 IPUs
+04:13:04:INFO@setup.py:MainProcess - HPU available: False, using: 0 HPUs
+04:13:57:INFO@distributed.py:MainProcess - ----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 6 processes
+----------------------------------------------------------------------------------------------------
+
+04:14:04:INFO@cuda.py:MainProcess - LOCAL_RANK: 4 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+04:14:04:INFO@cuda.py:MainProcess - LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+04:14:04:INFO@cuda.py:MainProcess - LOCAL_RANK: 5 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+04:14:04:INFO@cuda.py:MainProcess - LOCAL_RANK: 3 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+04:14:04:INFO@cuda.py:MainProcess - LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+04:14:04:INFO@cuda.py:MainProcess - LOCAL_RANK: 2 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+04:14:07:INFO@model_summary.py:MainProcess - 
+  | Name              | Type                   | Params
+-------------------------------------------------------------
+0 | model             | DiffusionWrapper       | 1.1 B 
+1 | first_stage_model | AutoencoderKL          | 83.7 M
+2 | cond_stage_model  | FrozenOpenCLIPEmbedder | 354 M 
+-------------------------------------------------------------
+1.1 B     Trainable params
+437 M     Non-trainable params
+1.6 B     Total params
+6,336.892 Total estimated model params size (MB)

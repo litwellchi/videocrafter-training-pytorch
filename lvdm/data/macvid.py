@@ -11,6 +11,7 @@ from torch.utils.data import Dataset
 from decord import VideoReader, cpu
 import glob
 import pandas as pd
+import yaml
 
 class MaCVid(Dataset):
     """
@@ -27,12 +28,14 @@ class MaCVid(Dataset):
                  video_length,
                  frame_stride=4,
                  subset_split='all',
+                 clip_length=1.0
                  ):
         self.data_root = data_root
         self.resolution = resolution
         self.video_length = video_length
         self.subset_split = subset_split
         self.frame_stride = frame_stride
+        self.clip_length = clip_length
         assert(self.subset_split in ['train', 'test', 'all'])
         self.exts = ['avi', 'mp4', 'webm']
 
@@ -43,17 +46,21 @@ class MaCVid(Dataset):
         self._make_dataset()
     
     def _make_dataset(self):
-        if self.subset_split == 'all':
-            data_folder = self.data_root
-        else:
-            data_folder = os.path.join(self.data_root, self.subset_split)
-        
-        
-        # TODO param the threshold and filename
-        metadata_path = os.path.join(data_folder,'metadata_catpion.json')
-        with open(metadata_path, 'r') as f:
-            self.videos = json.load(f)
-        self.videos = [item for item in self.videos if item['basic']["clip_duration"] > 1.0 ]
+
+        with open(self.data_root, 'r') as f:
+            self.config = yaml.load(f, Loader=yaml.FullLoader)
+        print("DATASET CONFIG:")
+        print(self.config)
+        self.videos = []
+        for meta_path in self.config['META']:
+            metadata_path = os.path.join(meta_path,'metadata_catpion.json')
+            with open(metadata_path, 'r') as f:
+                videos = json.load(f)
+                for item in videos:
+                    if item['basic']["clip_duration"] < self.clip_length: continue
+                    item['basic']['clip_path'] = os.path.join(meta_path,item['basic']['clip_path'])
+                    self.videos.append(item)
+                
         print(f'Number of videos = {len(self.videos)}')
 
     def __getitem__(self, index):

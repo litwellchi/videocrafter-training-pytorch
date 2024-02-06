@@ -279,7 +279,7 @@ if __name__ == "__main__":
             "params": {
                 "name": nowname,
                 "save_dir": logdir,
-                "project": "macvideo_gen",
+                "project": opt.name,
                 # "offline": opt.debug,
                 "id": nowname,
             }

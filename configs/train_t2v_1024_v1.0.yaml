@@ -88,7 +88,7 @@ data:
       # target: lvdm.data.webvid.WebVid
       target: lvdm.data.macvid.MaCVid
       params:
-        data_root: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85
+        data_root: configs/training_data/train_data.yaml
         resolution: 256
         video_length: 16
         # dataset_name: webvid
@@ -99,7 +99,7 @@ data:
       # target: lvdm.data.webvid.WebVid
       target: lvdm.data.macvid.MaCVid
       params:
-        data_root: /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85
+        data_root: configs/training_data/val_data.yaml
         resolution: 256
         video_length: 16
         # dataset_name: webvid
