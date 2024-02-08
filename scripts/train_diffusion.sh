@@ -1,14 +1,14 @@
 #!/bin/bash -l
 
 # SLURM SUBMIT SCRIPT
-#SBTACH --job-name=cnn_unet_video
-#SBATCH --nodes=14             # This needs to match Trainer(num_nodes=...)
+#SBTACH --job-name=cnn_unet_video_16node
+#SBATCH --nodes=16            # This needs to match Trainer(num_nodes=...)
 #SBATCH -p project   #important and necessary
 #SBATCH --gres=gpu:8
 #SBATCH --ntasks-per-node=8   # This needs to match Trainer(devices=...)
 #SBATCH --mem=0
 #SBATCH --time=24:00:00 # must set the training time by default. 24h max...
-#SBATCH --cpus-per-task=4
+#SBATCH --cpus-per-task=8
 #SBATCH --output=srun_output/_%j/output.txt
 #SBATCH --error=srun_output/_%j/error.txt
 #SBATCH --signal=SIGUSR1@90 # reboot if the process is killed..
@@ -40,11 +40,11 @@ export PYTHONPATH=$WORK_DIR
 # on your cluster you might need these:
 # set the network interface
 # export NCCL_SOCKET_IFNAME=^docker0,lo
-
+current_time=$(date +%Y%m%d%H%M%S)
 # might need the latest CUDA
 PROJ_ROOT="./"                      # root directory for saving experiment logs
-EXPNAME="test_macvid_t2v_1024_20240207"          # experiment name 
-DATADIR="configs/training_data/data_config.yaml"   # dataset directory
+EXPNAME="test_macvid_t2v_1024_3m_$current_time"        # experiment name 
+DATADIR="configs/training_data/train_data.yaml"   # dataset directory
 CONFIG="configs/train_t2v_1024_v1.0.yaml"
 CKPT_RESUME="../shared_ckpts/VideoCrafter/Text2Video-1024/model.ckpt"
 # run
@@ -58,5 +58,5 @@ srun python train_main.py \
 --name $EXPNAME \
 --logdir $PROJ_ROOT \
 --auto_resume True \
-lightning.trainer.num_nodes=14 \
+lightning.trainer.num_nodes=16 \
 --load_from_checkpoint $CKPT_RESUME 

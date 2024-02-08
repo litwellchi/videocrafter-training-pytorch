@@ -78,6 +78,7 @@ class MaCVid(Dataset):
             except:
                 index += 1
                 print(f"Load video failed! path = {video_path}")
+                return self.__getitem__(index)
     
         all_frames = list(range(0, len(video_reader), self.frame_stride))
         if len(all_frames) < self.video_length:

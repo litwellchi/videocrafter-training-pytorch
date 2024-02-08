@@ -82,7 +82,7 @@ model:
 data:
   target: train_main.DataModuleFromConfig
   params:
-    batch_size: 10
+    batch_size: 8
     num_workers: 16
     wrap: false
     train:
@@ -113,7 +113,7 @@ lightning:
     image_logger:
       target: lvdm.utils.callbacks.ImageLogger
       params:
-        batch_frequency: 1000
+        batch_frequency: 1000000000000
         max_images: 6
         increase_log_steps: False
     metrics_over_trainsteps_checkpoint:
@@ -125,7 +125,7 @@ lightning:
         every_n_train_steps: null
   trainer:
     benchmark: True
-    batch_size: 1
+    batch_size: 8
     num_workers: 38
     num_nodes: 1
     accumulate_grad_batches: 2

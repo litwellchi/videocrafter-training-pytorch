@@ -12,13 +12,14 @@ import pytorch_lightning as pl
 from pytorch_lightning import seed_everything
 from pytorch_lightning.trainer import Trainer
 
-from pytorch_lightning.plugins import DDPPlugin
+# from pytorch_lightning.plugins import DDPPlugin
+from pytorch_lightning.strategies import DDPStrategy
 from pytorch_lightning.plugins.environments import SLURMEnvironment
 import signal
 
 from lvdm.utils.common_utils import instantiate_from_config, str2bool
 from lvdm.utils.log import set_ptl_logger
-
+import time
 # if int((pl.__version__).split('.')[1])>=7:
 #     from pytorch_lightning.strategies import DDPStrategy,DDPShardedStrategy
 # else:
@@ -430,7 +431,8 @@ if __name__ == "__main__":
     else:
         print('low version ptl, no ddp shared')
         find_unused_parameters=lightning_config.get("find_unused_parameters", False)
-        trainer_kwargs["plugins"] = DDPPlugin(find_unused_parameters=find_unused_parameters)
+        trainer_kwargs["plugins"] = DDPStrategy(find_unused_parameters=find_unused_parameters)
+        # trainer_kwargs["plugins"] = DDPPlugin(find_unused_parameters=find_unused_parameters)
         
     if opt.signhup:
         trainer_kwargs["plugins"] = [SLURMEnvironment(requeue_signal=signal.SIGHUP)]
