@@ -341,7 +341,7 @@ class DDPM(pl.LightningModule):
 
         self.log("global_step", self.global_step,
                  prog_bar=True, logger=True, on_step=True, on_epoch=False)
-        self.log('train/step/loss', loss.item(), logger=True, on_epoch=False)
+        self.log('train/step/loss', loss.item(), logger=True, on_step=True)
 
         if self.use_scheduler:
             lr = self.optimizers().param_groups[0]['lr']

@@ -14,8 +14,8 @@ model:
     cond_stage_trainable: false
     conditioning_key: crossattn
     image_size:
-    - 40
-    - 64
+    - 10
+    - 16
     channels: 4
     scale_by_std: false
     scale_factor: 0.18215
@@ -83,13 +83,14 @@ model:
 data:
   target: train_main.DataModuleFromConfig
   params:
-    batch_size: 1
+    batch_size: 8
     num_workers: 16
     wrap: false
     train:
+      # target: lvdm.data.webvid.WebVid
       target: lvdm.data.macvid.MaCVid
       params:
-        data_root: /data/shared_zipdata/group_1_clips
+        data_root: configs/training_data/train_data.yaml
         resolution: 256
         video_length: 16
         # dataset_name: webvid
@@ -97,9 +98,10 @@ data:
         # spatial_transform: center_crop_resize
         # temporal_transform: rand_clips
     validation:
+      # target: lvdm.data.webvid.WebVid
       target: lvdm.data.macvid.MaCVid
       params:
-        data_root: /data/shared_zipdata/group_1_clips
+        data_root: configs/training_data/val_data.yaml
         resolution: 256
         video_length: 16
         # dataset_name: webvid
@@ -112,8 +114,8 @@ lightning:
     image_logger:
       target: lvdm.utils.callbacks.ImageLogger
       params:
-        batch_frequency: 1000
-        max_images: 8
+        batch_frequency: 1000000000000
+        max_images: 6
         increase_log_steps: False
     metrics_over_trainsteps_checkpoint:
       target: pytorch_lightning.callbacks.ModelCheckpoint
@@ -124,9 +126,9 @@ lightning:
         every_n_train_steps: null
   trainer:
     benchmark: True
-    batch_size: 1
+    batch_size: 8
     num_workers: 38
-    num_nodes: 4
+    num_nodes: 1
     accumulate_grad_batches: 2
     max_epochs: 2000
   modelcheckpoint:

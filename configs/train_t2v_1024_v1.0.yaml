@@ -1,7 +1,7 @@
 model:
-  # base_learning_rate: 6.0e-05
+  base_learning_rate: 6.0e-05
   scale_lr: False
-  base_learning_rate:  1.0e-06
+  # base_learning_rate:  1.0e-06
   target: lvdm.models.ddpm3d.LatentDiffusion
   params:
     linear_start: 0.00085
