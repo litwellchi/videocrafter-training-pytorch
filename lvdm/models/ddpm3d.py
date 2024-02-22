@@ -294,6 +294,7 @@ class DDPM(pl.LightningModule):
     def log_images(self, batch, N=8, n_row=2, sample=True, return_keys=None, **kwargs):
         log = dict()
         x = self.get_input(batch, self.first_stage_key)
+        if isinstance(x, list): x=x[0]
         N = min(x.shape[0], N)
         n_row = min(x.shape[0], n_row)
         x = x.to(self.device)[:N]
@@ -534,7 +535,7 @@ class LatentDiffusion(DDPM):
         assert(uncond_type in ["zero_embed", "empty_seq"])
         self.uncond_type = uncond_type
 
-
+        self.make_cond_schedule()
         self.restarted_from_ckpt = False
         if ckpt_path is not None:
             self.init_from_ckpt(ckpt_path, ignore_keys, only_model=only_model)
@@ -747,6 +748,56 @@ class LatentDiffusion(DDPM):
             return model_mean + nonzero_mask * (0.5 * model_log_variance).exp() * noise
 
     @torch.no_grad()
+    def log_images(self, batch, N=8, n_row=2, sample=True, return_keys=None, **kwargs):
+        log = dict()
+        x = self.get_input(batch, self.first_stage_key)
+        if isinstance(x, list): 
+            cons = x[1]
+            x=x[0]
+        N = min(x.shape[0], N)
+        n_row = min(x.shape[0], n_row)
+        x = x.to(self.device)[:N]
+        log["inputs"] = x
+
+        # get diffusion row
+        diffusion_row = list()
+        x_start = x[:n_row]
+
+        for t in range(self.num_timesteps):
+            if t % self.log_every_t == 0 or t == self.num_timesteps - 1:
+                t = repeat(torch.tensor([t]), '1 -> b', b=n_row)
+                t = t.to(self.device).long()
+                noise = torch.randn_like(x_start)
+                x_noisy = self.q_sample(x_start=x_start, t=t, noise=noise)
+                diffusion_row.append(x_noisy)
+
+        log["diffusion_row"] = self._get_rows_from_list(diffusion_row)
+
+        if sample:
+            # get denoise row
+            with self.ema_scope("Plotting"):
+                samples, denoise_row = self.sample(batch_size=N, conditions=cons, return_intermediates=True)
+
+            log["samples"] = samples
+            log["denoise_row"] = self._get_rows_from_list(denoise_row)
+
+        if return_keys:
+            if np.intersect1d(list(log.keys()), return_keys).shape[0] == 0:
+                return log
+            else:
+                return {key: log[key] for key in return_keys}
+        return log
+
+    @torch.no_grad()
+    def sample(self, batch_size=16,conditions=None, return_intermediates=False):
+        image_size = self.image_size
+        channels = self.channels
+        # shape = (batch_size, channels, image_size[0],image_size[1])
+        shape = (batch_size, channels,self.temporal_length,image_size[0]/8 ,image_size[1]/8)
+        return self.p_sample_loop(conditions, shape,
+                                  return_intermediates=return_intermediates)
+
+    @torch.no_grad()
     def p_sample_loop(self, cond, shape, return_intermediates=False, x_T=None, verbose=True, callback=None, \
                       timesteps=None, mask=None, x0=None, img_callback=None, start_T=None, log_every_t=None, **kwargs):
 
@@ -772,11 +823,13 @@ class LatentDiffusion(DDPM):
             assert x0 is not None
             assert x0.shape[2:3] == mask.shape[2:3]  # spatial size has to match
 
+        self.shorten_cond_schedule=False
         for i in iterator:
             ts = torch.full((b,), i, device=device, dtype=torch.long)
             if self.shorten_cond_schedule:
                 assert self.model.conditioning_key != 'hybrid'
-                tc = self.cond_ids[ts].to(cond.device)
+                tc = self.cond_ids.to(cond.device)
+                tc = tc[ts]
                 cond = self.q_sample(x_start=cond, t=tc, noise=torch.randn_like(cond))
 
             img = self.p_sample(img, cond, ts, clip_denoised=self.clip_denoised, **kwargs)
