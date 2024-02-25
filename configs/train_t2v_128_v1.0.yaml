@@ -1,9 +1,9 @@
 model:
-  base_learning_rate: 6.0e-05 # 1.5e-04
+  base_learning_rate: 6.0e-05
   scale_lr: False
+  # base_learning_rate:  1.0e-06
   target: lvdm.models.ddpm3d.LatentDiffusion
   params:
-    loss_type: l1
     log_every_t: 200
     linear_start: 0.00085
     linear_end: 0.012
@@ -14,16 +14,15 @@ model:
     cond_stage_trainable: false
     conditioning_key: crossattn
     image_size:
-    - 10
-    - 16
+    - 18
+    - 32
     channels: 4
     scale_by_std: false
     scale_factor: 0.18215
     use_ema: false
     uncond_type: empty_seq
-    monitor: val/loss_simple_ema
-    encoder_type: 2d
-
+    use_scale: true
+    fix_scale_bug: true
     unet_config:
       target: lvdm.modules.networks.openaimodel3d.UNetModel
       params:
@@ -50,8 +49,9 @@ model:
         temporal_selfatt_only: true
         use_relative_position: true
         use_causal_attention: false
-        temporal_length: 16
+        temporal_length: 32
         addition_attention: true
+        fps_cond: true
     first_stage_config:
       target: lvdm.models.autoencoder.AutoencoderKL
       params:
@@ -83,16 +83,17 @@ model:
 data:
   target: train_main.DataModuleFromConfig
   params:
-    batch_size: 8
-    num_workers: 16
+    batch_size: 4
+    num_workers: 32
     wrap: false
     train:
       # target: lvdm.data.webvid.WebVid
       target: lvdm.data.macvid.MaCVid
       params:
         data_root: configs/training_data/train_data.yaml
-        resolution: 256
-        video_length: 16
+        # resolution: 256
+        resolution: [144, 256]
+        video_length: 4
         # dataset_name: webvid
         subset_split: all
         # spatial_transform: center_crop_resize
@@ -102,8 +103,9 @@ data:
       target: lvdm.data.macvid.MaCVid
       params:
         data_root: configs/training_data/val_data.yaml
-        resolution: 256
-        video_length: 16
+        # resolution: 256
+        resolution: [144, 256]
+        video_length: 32
         # dataset_name: webvid
         subset_split: all
         # spatial_transform: center_crop_resize
