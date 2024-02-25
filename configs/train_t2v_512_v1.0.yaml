@@ -84,7 +84,7 @@ model:
 data:
   target: train_main.DataModuleFromConfig
   params:
-    batch_size: 8
+    batch_size: 2
     num_workers: 16
     wrap: false
     train:
@@ -92,7 +92,7 @@ data:
       target: lvdm.data.macvid.MaCVid
       params:
         data_root: configs/training_data/train_data.yaml
-        resolution: 256
+        resolution: [320, 512]
         video_length: 16
         # dataset_name: webvid
         subset_split: all
@@ -103,8 +103,9 @@ data:
       target: lvdm.data.macvid.MaCVid
       params:
         data_root: configs/training_data/val_data.yaml
-        resolution: 256
+        resolution: [320, 512]
         video_length: 16
+        clip_length: 5.0
         # dataset_name: webvid
         subset_split: all
         # spatial_transform: center_crop_resize
@@ -127,7 +128,7 @@ lightning:
         every_n_train_steps: null
   trainer:
     benchmark: True
-    batch_size: 8
+    batch_size: 2
     num_workers: 38
     num_nodes: 1
     accumulate_grad_batches: 2
