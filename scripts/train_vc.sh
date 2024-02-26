@@ -4,7 +4,7 @@ PROJ_ROOT="./"                      # root directory for saving experiment logs
 EXPNAME="cv_webvid"          # experiment name 
 # DATADIR="/dataset/sky_timelapse"  # dataset directory
 # DATADIR="/aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85"  # dataset directory
-DATADIR="/aifs4su/mmcode/videogen/MACVideoGen/configs/training_data/data_config.yaml" # dataset directory
+DATADIR="configs/training_data/val_data.yaml" # dataset directory
 # AEPATH="models/lvdm_short/short_taihi.ckpt"    # pretrained video autoencoder checkpoint
 # AEPATH="models/ae/ae_sky.ckpt"    # pretrained video autoencoder checkpoint
 
@@ -19,9 +19,10 @@ python train_main.py \
 -t --gpus '0,1,2,3,5,6', \
 --name $EXPNAME \
 --logdir $PROJ_ROOT \
---auto_resume True \
+# --auto_resume True \
 --wandb True \
 lightning.trainer.num_nodes=1 \
+--signhup False \
 --load_from_checkpoint $CKPT_RESUME \ 
 # data.params.train.params.data_root $DATADIR \ 
 # data.params.validation.params.data_root $DATADIR 

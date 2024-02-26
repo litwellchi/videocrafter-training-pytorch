@@ -4,6 +4,7 @@ model:
   # base_learning_rate:  1.0e-06
   target: lvdm.models.ddpm3d.LatentDiffusion
   params:
+    log_every_t: 200
     linear_start: 0.00085
     linear_end: 0.012
     num_timesteps_cond: 1
@@ -82,7 +83,7 @@ model:
 data:
   target: train_main.DataModuleFromConfig
   params:
-    batch_size: 8
+    batch_size: 1
     num_workers: 16
     wrap: false
     train:
@@ -90,10 +91,12 @@ data:
       target: lvdm.data.macvid.MaCVid
       params:
         data_root: configs/training_data/train_data.yaml
-        resolution: 256
+        # resolution: 256
+        resolution: [576, 1024]
         video_length: 16
         # dataset_name: webvid
         subset_split: all
+        clip_length: 5.0
         # spatial_transform: center_crop_resize
         # temporal_transform: rand_clips
     validation:
@@ -101,7 +104,8 @@ data:
       target: lvdm.data.macvid.MaCVid
       params:
         data_root: configs/training_data/val_data.yaml
-        resolution: 256
+        # resolution: 256
+        resolution: [576, 1024]
         video_length: 16
         # dataset_name: webvid
         subset_split: all
@@ -125,7 +129,8 @@ lightning:
         every_n_train_steps: null
   trainer:
     benchmark: True
-    batch_size: 8
+    precision: 16
+    batch_size: 1
     num_workers: 38
     num_nodes: 1
     accumulate_grad_batches: 2
