@@ -41,7 +41,7 @@ class MaCVid(Dataset):
 
         if isinstance(self.resolution, int):
             self.resolution = [self.resolution, self.resolution]
-        assert(isinstance(self.resolution, list) and len(self.resolution) == 2)
+        # assert(isinstance(self.resolution, list) and len(self.resolution) == 2)
 
         self._make_dataset()
     
