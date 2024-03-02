@@ -1,17 +1,17 @@
 META:
-  - /scratch/suptest/video_data/macvid/video_dataset_34
-  - /scratch/suptest/video_data/macvid/video_dataset_27
-  - /scratch/suptest/video_data/macvid/video_dataset_28
-  - /scratch/suptest/video_data/macvid/video_dataset_35
-  - /scratch/suptest/video_data/macvid/video_dataset_36
-  - /scratch/suptest/video_data/macvid/video_dataset_37
-  - /scratch/suptest/video_data/macvid/video_dataset_38
-  - /scratch/suptest/video_data/macvid/video_dataset_45
-  - /scratch/suptest/video_data/macvid/video_dataset_46
-  - /scratch/suptest/video_data/macvid/video_dataset_47
-  - /scratch/suptest/video_data/macvid/video_dataset_48
-  - /scratch/suptest/video_data/macvid/video_dataset_49
-  # - /scratch/suptest/video_data/macvid/video_dataset_85
+#   - /scratch/suptest/video_data/macvid/video_dataset_34
+#   - /scratch/suptest/video_data/macvid/video_dataset_27
+#   - /scratch/suptest/video_data/macvid/video_dataset_28
+#   - /scratch/suptest/video_data/macvid/video_dataset_35
+#   - /scratch/suptest/video_data/macvid/video_dataset_36
+#   - /scratch/suptest/video_data/macvid/video_dataset_37
+#   - /scratch/suptest/video_data/macvid/video_dataset_38
+#   - /scratch/suptest/video_data/macvid/video_dataset_45
+#   - /scratch/suptest/video_data/macvid/video_dataset_46
+#   - /scratch/suptest/video_data/macvid/video_dataset_47
+#   - /scratch/suptest/video_data/macvid/video_dataset_48
+#   - /scratch/suptest/video_data/macvid/video_dataset_49
+  - /aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85
 
 # not ready metadata
   # - /scratch/suptest/video_data/macvid/video_dataset_11

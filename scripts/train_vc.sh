@@ -1,7 +1,7 @@
 
 PROJ_ROOT="./"                      # root directory for saving experiment logs
 # EXPNAME="cv_macvid"          # experiment name 
-EXPNAME="cv_webvid"          # experiment name 
+EXPNAME="test3"          # experiment name 
 # DATADIR="/dataset/sky_timelapse"  # dataset directory
 # DATADIR="/aifs4su/mmdata/rawdata/videogen/macvid/video_dataset_85"  # dataset directory
 DATADIR="/aifs4su/mmcode/videogen/MACVideoGen/configs/training_data/data_config.yaml" # dataset directory
@@ -16,12 +16,13 @@ CKPT_RESUME="/aifs4su/mmcode/videogen/share_ckpts/VideoCrafter/Text2Video-1024/m
 export TOKENIZERS_PARALLELISM=false
 python train_main.py \
 --base $CONFIG \
--t --gpus '0,1,2,3,5,6', \
+-t --gpus '6', \
 --name $EXPNAME \
 --logdir $PROJ_ROOT \
 --auto_resume True \
 --wandb True \
 lightning.trainer.num_nodes=1 \
+--signhup False \
 --load_from_checkpoint $CKPT_RESUME \ 
 # data.params.train.params.data_root $DATADIR \ 
 # data.params.validation.params.data_root $DATADIR 

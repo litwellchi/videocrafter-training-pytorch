@@ -17,7 +17,7 @@ import torch
 import torch.nn as nn
 from torchvision.utils import make_grid
 import pytorch_lightning as pl
-from utils.utils import instantiate_from_config
+from lvdm.utils.common_utils import instantiate_from_config
 from lvdm.ema import LitEma
 from lvdm.distributions import DiagonalGaussianDistribution
 from lvdm.models.utils_diffusion import make_beta_schedule

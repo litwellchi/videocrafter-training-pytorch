@@ -42,11 +42,11 @@ export PYTHONPATH=$WORK_DIR
 # export NCCL_SOCKET_IFNAME=^docker0,lo
 current_time=$(date +%Y%m%d%H%M%S)
 # might need the latest CUDA
-PROJ_ROOT="./"                      # root directory for saving experiment logs
+PROJ_ROOT="./exp"                      # root directory for saving experiment logs
 EXPNAME="test_macvid_t2v_1024_3m_$current_time"        # experiment name 
 DATADIR="configs/training_data/train_data.yaml"   # dataset directory
 CONFIG="configs/train_t2v_1024_v1.0.yaml"
-CKPT_RESUME="../shared_ckpts/VideoCrafter/Text2Video-1024/model.ckpt"
+CKPT_RESUME="/aifs4su/mmcode/videogen/share_ckpts/VideoCrafter/Text2Video-1024/model.ckpt"
 # run
 export TOKENIZERS_PARALLELISM=false
 # export 
@@ -54,7 +54,7 @@ export TOKENIZERS_PARALLELISM=false
 # conda activate videocrafter
 srun python train_main.py \
 --base $CONFIG \
--t --gpus '0,1,2,3,4,5,6,7', \
+-t --gpus '0', \
 --name $EXPNAME \
 --logdir $PROJ_ROOT \
 --auto_resume True \

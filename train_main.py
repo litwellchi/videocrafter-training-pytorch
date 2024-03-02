@@ -253,25 +253,30 @@ if __name__ == "__main__":
     # config.model.params['logdir'] = logdir
     model = instantiate_from_config(config.model)
     
+    # # ckpt
+    # if opt.load_from_checkpoint:
+    #     config.model.load_from_checkpoint = opt.load_from_checkpoint
+    # if "load_from_checkpoint" in config.model and config.model.load_from_checkpoint and not resume:
+    #     try:
+    #         print(f"load checkpoint from {opt.load_from_checkpoint}")
+    #         model = model.load_from_checkpoint(config.model.load_from_checkpoint, **config.model.params)
+    #     except:
+    #         # avoid size mismatch
+    #         # gpu_id = opt.gpus.split(",")[0]
+    #         # state_dict = torch.load(config.model.load_from_checkpoint, map_location=f"cuda:{gpu_id}")['state_dict']
+    #         state_dict = torch.load(config.model.load_from_checkpoint, map_location=f"cpu")['state_dict']
+    #         model_state_dict = model.state_dict()
+    #         for n, p in model_state_dict.items():
+    #             if p.shape != state_dict[n].shape:
+    #                 print(f"Skip load parameter [{n}] from pretrained! ")
+    #                 state_dict.pop(n)
+    #         model_state_dict.update(state_dict)
+    #         model.load_state_dict(model_state_dict)
     # ckpt
-    if opt.load_from_checkpoint:
-        config.model.load_from_checkpoint = opt.load_from_checkpoint
-    if "load_from_checkpoint" in config.model and config.model.load_from_checkpoint and not resume:
-        try:
-            print(f"load checkpoint from {opt.load_from_checkpoint}")
-            model = model.load_from_checkpoint(config.model.load_from_checkpoint, **config.model.params)
-        except:
-            # avoid size mismatch
-            # gpu_id = opt.gpus.split(",")[0]
-            # state_dict = torch.load(config.model.load_from_checkpoint, map_location=f"cuda:{gpu_id}")['state_dict']
-            state_dict = torch.load(config.model.load_from_checkpoint, map_location=f"cpu")['state_dict']
-            model_state_dict = model.state_dict()
-            for n, p in model_state_dict.items():
-                if p.shape != state_dict[n].shape:
-                    print(f"Skip load parameter [{n}] from pretrained! ")
-                    state_dict.pop(n)
-            model_state_dict.update(state_dict)
-            model.load_state_dict(model_state_dict)
+    if opt.load_from_checkpoint and not resume:
+        ckpt = opt.load_from_checkpoint
+        opt.resume_from_checkpoint = ckpt
+        print(f"load checkpoint from {opt.load_from_checkpoint}")
 
     # trainer and callbacks
     trainer_kwargs = dict()
@@ -436,7 +441,6 @@ if __name__ == "__main__":
         
     if opt.signhup:
         trainer_kwargs["plugins"] = [SLURMEnvironment(requeue_signal=signal.SIGHUP)]
-
     trainer = Trainer.from_argparse_args(trainer_opt, **trainer_kwargs)
     trainer.logdir = logdir
 
@@ -504,11 +508,13 @@ if __name__ == "__main__":
 
     # run
     if opt.train:
-        try:
-            trainer.fit(model, data)
-        except Exception as e:
-            print(f"error message: {e}")
-            melk()
+        print("model",type(model))
+        trainer.fit(model, data)
+        # try:
+        #     trainer.fit(model, data)
+        # except Exception as e:
+        #     print(f"error message: {e}")
+        #     melk()
             # raise
     if opt.val:
         trainer.validate(model, data)

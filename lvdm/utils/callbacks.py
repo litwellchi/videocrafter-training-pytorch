@@ -13,6 +13,11 @@ from pytorch_lightning.utilities.distributed import rank_zero_only
 from pytorch_lightning.callbacks import Callback
 from pytorch_lightning.utilities import rank_zero_info
 from pytorch_lightning.callbacks import ModelCheckpoint, Callback, LearningRateMonitor
+from pytorch_lightning.loggers import WandbLogger
+from scripts.evaluation.funcs import batch_ddim_sampling
+import wandb
+from einops import rearrange
+from torchvision.transforms import ToPILImage
 # ---------------------------------------------------------------------------------
 class ImageLogger(Callback):
     def __init__(self, batch_frequency, max_images, clamp=True, increase_log_steps=True,
@@ -23,14 +28,17 @@ class ImageLogger(Callback):
         self.rescale = rescale
         self.batch_freq = batch_frequency
         self.max_images = max_images
-        if int((pl.__version__).split('.')[1])>=7:
-            self.logger_log_images = {
-                pl.loggers.CSVLogger: self._testtube,
-            }
-        else:
-            self.logger_log_images = {
-                pl.loggers.TestTubeLogger: self._testtube,
-            }
+        self.logger_log_images = {
+            WandbLogger:self._testtube
+        }
+        # if int((pl.__version__).split('.')[1])>=7:
+        #     self.logger_log_images = {
+        #         pl.loggers.CSVLogger: self._testtube,
+        #     }
+        # else:
+        #     self.logger_log_images = {
+        #         pl.loggers.TestTubeLogger: self._testtube,
+        #     }
         self.log_steps = [2 ** n for n in range(int(np.log2(self.batch_freq)) + 1)]
         if not increase_log_steps:
             self.log_steps = [self.batch_freq]
@@ -155,7 +163,7 @@ class ImageLogger(Callback):
                 print('Finish!')
                 
     @rank_zero_only
-    def log_img(self, pl_module, batch, batch_idx, split="train", rank=0):
+    def log_img(self, pl_module, batch, batch_idx, step,split="train",rank=0):
         """ generate images, then save and log to tensorboard """
         
         check_idx = batch_idx if self.log_on_batch_idx else pl_module.global_step
@@ -172,29 +180,34 @@ class ImageLogger(Callback):
                 torch.cuda.empty_cache()
 
             with torch.no_grad():
-                log_func = pl_module.log_videos if hasattr(pl_module, 'is_video') and pl_module.is_video else pl_module.log_images
-                images = log_func(batch, split=split)
+                # log_func = pl_module.log_videos if hasattr(pl_module, 'is_video') and pl_module.is_video else pl_module.log_images
+                log_func = self.log_images
+                images = log_func(pl_module, batch,split=split)
                 torch.cuda.empty_cache()
 
             # process images
-            for k in images:
-                if hasattr(images[k], 'shape'):
-                    N = min(images[k].shape[0], self.max_images)
-                    images[k] = images[k][:N]
-                if isinstance(images[k], torch.Tensor):
-                    images[k] = images[k].detach().cpu()
-                    if self.clamp:
-                        images[k] = torch.clamp(images[k], -1., 1.)
-            
+            video_frames = []
+            torch.save(images,"images_tensor.pt")   
+            images = torch.clamp(images, -1., 1.)
+            video = images[0][0]
             print("Log local ...")
-            self.log_local(pl_module.logger.save_dir, split, images,
-                           pl_module.global_step, pl_module.current_epoch, 
-                           batch_idx, rank)
-            if self.log_to_tblogger:
-                print("Log images to logger ...")
-                logger_log_images = self.logger_log_images.get(logger, lambda *args, **kwargs: None)
-                logger_log_images(pl_module, images, pl_module.global_step, split)
-                print('Finish!')
+            video = rearrange(video, 'c f h w -> f c h w')# time, channels, height, width
+            for frame in video:
+                to_img = ToPILImage()
+                frame = to_img(frame.cpu().detach()).convert("RGB")
+                frame = (np.array(frame)+1)/2*255
+                frame = np.transpose(frame,[2,0,1])
+                video_frames.append(frame)
+            video_wandb = wandb.Video(np.array(video_frames), fps=10, format="gif",caption="Pong")
+            wandb.log({"video": video_wandb},step=step)
+            # self.log_local(pl_module.logger.save_dir, split, images,
+            #                pl_module.global_step, pl_module.current_epoch, 
+            #                batch_idx, rank)
+            # if self.log_to_tblogger:
+            #     print("Log images to logger ...")
+            #     logger_log_images = self.logger_log_images.get(logger, lambda *args, **kwargs: None)
+            #     logger_log_images(pl_module, images, pl_module.global_step, split)
+            #     print('Finish!')
 
             if is_train:
                 pl_module.train()
@@ -212,14 +225,28 @@ class ImageLogger(Callback):
 
     def on_train_batch_end(self, trainer, pl_module, outputs, batch, batch_idx, dataloader_idx=None):
         if not self.disabled and (pl_module.global_step > 0 or self.log_first_step):
-            self.log_img(pl_module, batch, batch_idx, split="train", rank=trainer.global_rank)
+            self.log_img(pl_module, batch, batch_idx,trainer.global_step, split="train", rank=trainer.global_rank)
 
     def on_validation_batch_end(self, trainer, pl_module, outputs, batch, batch_idx, dataloader_idx=None):
         if not self.disabled and pl_module.global_step > 0:
-            self.log_img(pl_module, batch, batch_idx, split="val", rank=trainer.global_rank)
+            self.log_img(pl_module, batch, batch_idx, trainer.global_step,split="val", rank=trainer.global_rank)
         if hasattr(pl_module, 'calibrate_grad_norm'):
             if (pl_module.calibrate_grad_norm and batch_idx % 25 == 0) and batch_idx > 0:
                 self.log_gradients(trainer, pl_module, batch_idx=batch_idx)
+
+    @torch.no_grad()
+    def log_images(self, pl_module,batch, N=8, n_row=2, sample=True, return_keys=None, **kwargs):
+       model = pl_module
+       bsz,channel,frames,h,w = batch["video"].shape
+       h = int(h/8)
+       w = int(w/8)
+       prompts =["a woman standing on a bridge talking on a phone."]*bsz
+       text_emb = model.get_learned_conditioning(prompts)
+       cond = {"c_crossattn": [text_emb], "fps": 24}
+       noise_shape = torch.Size([bsz,4,frames,h,w])
+       batch_samples = batch_ddim_sampling(model, cond, noise_shape, 1, \
+            50, 1.0, 1.0)
+       return batch_samples
 
 # ---------------------------------------------------------------------------------
 class CUDACallback(Callback):
