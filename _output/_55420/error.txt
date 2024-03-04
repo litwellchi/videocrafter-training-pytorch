@@ -1,0 +1,21 @@
+[rank: 0] Global seed set to 123
+Traceback (most recent call last):
+  File "/project/suptest/xchiaa/debug-yq/MACVideoGen/scripts/evaluation/funcs.py", line 94, in load_checkpoint
+    for key in state_dict['module'].keys():
+KeyError: 'module'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "scripts/evaluation/inference.py", line 150, in <module>
+    run_inference(args, gpu_num, rank)
+  File "scripts/evaluation/inference.py", line 62, in run_inference
+    model = load_model_checkpoint(model, args.ckpt_path)
+  File "/project/suptest/xchiaa/debug-yq/MACVideoGen/scripts/evaluation/funcs.py", line 102, in load_model_checkpoint
+    load_checkpoint(model, ckpt, full_strict=True)
+  File "/project/suptest/xchiaa/debug-yq/MACVideoGen/scripts/evaluation/funcs.py", line 100, in load_checkpoint
+    model.load_state_dict(state_dict, strict=full_strict)
+  File "/home/xchiaa/anaconda3/envs/videocrafter/lib/python3.8/site-packages/torch/nn/modules/module.py", line 2153, in load_state_dict
+    raise RuntimeError('Error(s) in loading state_dict for {}:\n\t{}'.format(
+RuntimeError: Error(s) in loading state_dict for LatentDiffusion:
+	Missing key(s) in state_dict: "scale_arr". 

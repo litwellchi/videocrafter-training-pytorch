@@ -99,7 +99,7 @@ def load_model_checkpoint(model, ckpt):
                 state_dict = state_dict["state_dict"]
             model.load_state_dict(state_dict, strict=full_strict)
         return model
-    load_checkpoint(model, ckpt, full_strict=True)
+    load_checkpoint(model, ckpt, full_strict=False)#True
     print('>>> model checkpoint loaded.')
     return model
 

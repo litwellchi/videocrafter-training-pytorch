@@ -53,6 +53,91 @@ def get_parser(**parser_kwargs):
     return parser
 
 # ---------------------------------------------------------------------------------
+def get_empty_params_comparedwith_sd(model, model_cfg):
+    sd_ckpt = model_cfg.sd_checkpoint
+    assert os.path.exists(sd_ckpt), "Error: Stable Diffusion checkpoint NOT found at:%s"%sd_ckpt
+    expand_to_3d = model_cfg.expand_to_3d if "expand_to_3d" in model_cfg else False
+    adapt_keyname = True if not expand_to_3d and model_cfg.params.unet_config.params.temporal_attention else False
+    model_pretrained, empty_paras = load_from_pretrainedSD_checkpoint(model,
+            expand_to_3d=expand_to_3d, adapt_keyname=adapt_keyname, pretained_ckpt=sd_ckpt)
+    empty_paras = [n.lstrip("model").lstrip(".") for n in empty_paras]
+    return model_pretrained, empty_paras
+
+
+# ---------------------------------------------------------------------------------
+def load_from_pretrainedSD_checkpoint(model, pretained_ckpt, expand_to_3d=True, adapt_keyname=False):
+    print(f'------------------- Load pretrained SD weights -------------------')
+    sd_state_dict = torch.load(pretained_ckpt, map_location=f"cpu")
+    if "state_dict" in list(sd_state_dict.keys()):
+        sd_state_dict = sd_state_dict["state_dict"]
+    model_state_dict = model.state_dict()
+    ## delete ema_weights just for <precise param counting>
+    for k in list(sd_state_dict.keys()):
+        if k.startswith('model_ema'):
+            del sd_state_dict[k]
+    print(f'Num of parameters of target model: {len(model_state_dict.keys())}')
+    print(f'Num of parameters of source model: {len(sd_state_dict.keys())}')
+
+    if adapt_keyname:
+        ## adapting to standard 2d network: modify the key name because of the add of temporal-attention
+        mapping_dict = {
+            'middle_block.2': 'middle_block.3',
+            'output_blocks.5.2': 'output_blocks.5.3',
+            'output_blocks.8.2': 'output_blocks.8.3',
+        }
+        cnt = 0
+        for k in list(sd_state_dict.keys()):
+            for src_word, dst_word in mapping_dict.items():
+                if src_word in k:
+                    new_key = k.replace(src_word, dst_word)
+                    sd_state_dict[new_key] = sd_state_dict[k]
+                    del sd_state_dict[k]
+                    cnt += 1
+        print(f'[renamed {cnt} source keys to match target model]')
+
+    pretrained_dict = {k: v for k, v in sd_state_dict.items() if k in model_state_dict} # drop extra keys
+    empty_paras = [k for k, v in model_state_dict.items() if k not in pretrained_dict] # log no pretrained keys
+    print(f'Pretrained parameters: {len(pretrained_dict.keys())}')
+    print(f'Empty parameters: {len(empty_paras)} ')
+    assert(len(empty_paras) + len(pretrained_dict.keys()) == len(model_state_dict.keys()))
+
+    if expand_to_3d:
+        ## adapting to 2d inflated network
+        pretrained_dict = expand_conv_kernel(pretrained_dict)
+
+    # overwrite entries in the existing state dict
+    model_state_dict.update(pretrained_dict)
+
+    # load the new state dict
+    try:
+        model.load_state_dict(model_state_dict)
+    except:
+        state_dict = torch.load(model_state_dict, map_location=f"cpu")
+        if "state_dict" in list(state_dict.keys()):
+            state_dict = state_dict["state_dict"]
+        model_state_dict = model.state_dict()
+        ## for layer with channel changed (e.g. GEN 1's conditon-concatenating setting)
+        for n, p in model_state_dict.items():
+            if p.shape != state_dict[n].shape:
+                print(f"Skipped parameter [{n}] from pretrained! ")
+                state_dict.pop(n)
+        model_state_dict.update(state_dict)
+        model.load_state_dict(model_state_dict)
+
+    print(f'---------------------------- Finish! ----------------------------')
+    return model, empty_paras
+
+# ---------------------------------------------------------------------------------
+
+def expand_conv_kernel(pretrained_dict):
+    """ expand 2d conv parameters from 4D -> 5D """
+    for k, v in pretrained_dict.items():
+        if v.dim() == 4 and not k.startswith("first_stage_model"):
+            v = v.unsqueeze(2)
+            pretrained_dict[k] = v
+    return pretrained_dict
+
+# ---------------------------------------------------------------------------------
 def nondefault_trainer_args(opt):
     parser = argparse.ArgumentParser()
     parser = Trainer.add_argparse_args(parser)
@@ -272,6 +357,8 @@ if __name__ == "__main__":
                     state_dict.pop(n)
             model_state_dict.update(state_dict)
             model.load_state_dict(model_state_dict)
+    if hasattr(config.model, 'empty_params_only'):
+        _, model.empty_paras = get_empty_params_comparedwith_sd(model, config.model)
 
     # trainer and callbacks
     trainer_kwargs = dict()

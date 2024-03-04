@@ -11,7 +11,8 @@ DATADIR="/aifs4su/mmcode/videogen/MACVideoGen/configs/training_data/data_config.
 # CONFIG="configs/lvdm_short/sky.yaml"
 # OR CONFIG="configs/videoae/ucf.yaml"
 CONFIG="configs/train_t2v_1024_v1.0.yaml"
-CKPT_RESUME="/aifs4su/mmcode/videogen/share_ckpts/VideoCrafter/Text2Video-1024/model.ckpt"
+# CKPT_RESUME="/aifs4su/mmcode/videogen/share_ckpts/VideoCrafter/Text2Video-1024/model.ckpt"
+CKPT_RESUME="checkpoints/model.ckpt"
 # run
 export TOKENIZERS_PARALLELISM=false
 python train_main.py \

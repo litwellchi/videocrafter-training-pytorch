@@ -36,11 +36,11 @@ export WORK_DIR=../
 export PYTHONPATH=$WORK_DIR
 
 
-name="debug_512_t2v_6k_epoch_00"
+name="debug_512_t2v_6k_epoch_00_0228_wed"
 
 # ckpt='/aifs4su/mmcode/videogen/share_ckpts/VideoCrafter/VideoCrafter2/model.ckpt'
 ckpt='/project/suptest/xchiaa/debug-yq/MACVideoGen/test_macvid_t2v_512_debug/checkpoints/epoch=0000-step=000018.ckpt'
-config='configs/inference_t2v_512_v1.0.yaml'
+config='configs/train_t2v_512_v1.0_debug0228.yaml'
 
 # prompt_file="prompts/test_prompts.txt"
 prompt_file="prompts/test_prompt.txt"

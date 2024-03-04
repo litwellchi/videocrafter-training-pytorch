@@ -1,0 +1,10 @@
+@CoLVDM Inference: 2024-03-02-23-00-06
+torch.cuda.is_available():True
+AE working on z of shape (1, 4, 64, 64) = 16384 dimensions.
+>>> model checkpoint loaded.
+Number of parameter: 1582.17246M
+[rank:0] 3/3 samples loaded.
+[rank:0] batch-1 (4)x1 ...
+DDIM scale False
+ddim device cuda:0
+Saved in results/debug_512_t2v_6k_epoch_00_0228_wed_2_0303_epoch10. Time used: 65.15 seconds
