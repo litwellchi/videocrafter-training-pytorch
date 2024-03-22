@@ -86,7 +86,7 @@ class MaCVid(Dataset):
 
         # select random clip
         rand_idx = random.randint(0, len(all_frames) - self.video_length)
-        frame_indices = list(range(rand_idx, rand_idx+self.video_length))
+        frame_indices = all_frames[rand_idx:rand_idx+self.video_length]
         frames = video_reader.get_batch(frame_indices)
         assert(frames.shape[0] == self.video_length),f'{len(frames)}, self.video_length={self.video_length}'
 
