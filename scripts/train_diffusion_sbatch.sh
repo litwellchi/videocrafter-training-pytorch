@@ -2,7 +2,7 @@
 
 # SLURM SUBMIT SCRIPT
 #SBTACH --job-name=cnn_unet_video_16node
-#SBATCH --nodes=16            # This needs to match Trainer(num_nodes=...)
+#SBATCH --nodes=8            # This needs to match Trainer(num_nodes=...)
 #SBATCH -p project   #important and necessary
 #SBATCH --gres=gpu:8
 #SBATCH --ntasks-per-node=8   # This needs to match Trainer(devices=...)
@@ -16,6 +16,8 @@
 # debugging flags (optional)
 
 nodes=( $( scontrol show hostnames $SLURM_JOB_NODELIST ) )
+echo "numnodes:"$nodes
+
 nodes_array=($nodes)
 head_node=${nodes_array[0]}
 head_node_ip=$(srun --nodes=1 --ntasks=1 -w "$head_node" hostname --ip-address)
@@ -43,10 +45,12 @@ export PYTHONPATH=$WORK_DIR
 current_time=$(date +%Y%m%d%H%M%S)
 # might need the latest CUDA
 PROJ_ROOT="./"                      # root directory for saving experiment logs
-EXPNAME="test_macvid_t2v_1024_3m_$current_time"        # experiment name 
+EXPNAME="test_macvid_t2v_512_debug"        # experiment name 
+# EXPNAME="test_macvid_t2v_512_3.5m_$current_time"        # experiment name 
 DATADIR="configs/training_data/train_data.yaml"   # dataset directory
-CONFIG="configs/train_t2v_1024_v1.0.yaml"
-CKPT_RESUME="../shared_ckpts/VideoCrafter/Text2Video-1024/model.ckpt"
+CONFIG="configs/train_t2v_512_v1.0.yaml"
+CKPT_RESUME="/project/suptest/xchiaa/shared_ckpts/VideoCrafter/Text2Video-512/model.ckpt"
+# CKPT_RESUME="checkpoints/model.ckpt"
 # run
 export TOKENIZERS_PARALLELISM=false
 # export 
@@ -58,5 +62,5 @@ srun python train_main.py \
 --name $EXPNAME \
 --logdir $PROJ_ROOT \
 --auto_resume True \
-lightning.trainer.num_nodes=16 \
+lightning.trainer.num_nodes=8 \
 --load_from_checkpoint $CKPT_RESUME 

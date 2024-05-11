@@ -36,11 +36,12 @@ export WORK_DIR=../
 export PYTHONPATH=$WORK_DIR
 
 
-name="finetune_1024_t2v_v_epoch_08"
+name="pretrain_512_t2v_v_epoch_05"
+# name="base_512_t2v_v1"
 
 # ckpt='/aifs4su/mmcode/videogen/share_ckpts/VideoCrafter/VideoCrafter2/model.ckpt'
-ckpt='/project/vgenfmod/test_macvid_t2v_1024_3m_20240209020426/checkpoints/epoch=0008-step=016846.ckpt'
-config='configs/inference_t2v_1024_v1.0.yaml'
+ckpt='/project/suptest/xchiaa/MACVideoGen/pretrain_macvid_t2v_512_3m_20240221230300/checkpoints/epoch=0005-step=010680.ckpt'
+config='configs/inference_t2v_512_v1.0.yaml'
 
 # prompt_file="prompts/test_prompts.txt"
 prompt_file="prompts/test_prompt.txt"
@@ -53,7 +54,7 @@ python3 scripts/evaluation/inference.py \
 --config $config \
 --savedir $res_dir/$name \
 --n_samples 1 \
---bs 4 --height 576 --width 1024 \
+--bs 4 --height 320 --width 512 \
 --unconditional_guidance_scale 12.0 \
 --ddim_steps 50 \
 --ddim_eta 1.0 \

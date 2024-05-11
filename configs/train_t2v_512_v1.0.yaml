@@ -1,6 +1,8 @@
 model:
-  base_learning_rate: 6.0e-05 # 1.5e-04
+  base_learning_rate: 6.0e-06 # 1.5e-04
   scale_lr: False
+  empty_params_only: True
+  sd_checkpoint: v2-1_512-ema-pruned.ckpt
   target: lvdm.models.ddpm3d.LatentDiffusion
   params:
     loss_type: l1
@@ -23,6 +25,7 @@ model:
     uncond_type: empty_seq
     monitor: val/loss_simple_ema
     encoder_type: 2d
+    use_scale: true
 
     unet_config:
       target: lvdm.modules.networks.openaimodel3d.UNetModel
@@ -105,7 +108,7 @@ data:
         data_root: configs/training_data/val_data.yaml
         resolution: [320, 512]
         video_length: 16
-        clip_length: 5.0
+        clip_length: 3.0
         # dataset_name: webvid
         subset_split: all
         # spatial_transform: center_crop_resize

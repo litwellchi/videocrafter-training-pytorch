@@ -1,11 +1,11 @@
 name="base_1024_t2v_v1"
 
 # ckpt='/aifs4su/mmcode/videogen/share_ckpts/VideoCrafter/VideoCrafter2/model.ckpt'
-ckpt='/aifs4su/mmcode/videogen/MACVideoGen/overfit_macvid_1/checkpoints/epoch=0008-step=000243.ckpt'
+ckpt='/scratch/vgenfmod/shared_ckpts/VideoCrafter/Text2Video-1024/model.ckpt'
 config='configs/inference_t2v_1024_v1.0.yaml'
 
 # prompt_file="prompts/test_prompts.txt"
-prompt_file="/aifs4su/mmcode/videogen/MACVideoGen/prompts/test_prompts.txt"
+prompt_file="./prompts/test_prompts.txt"
 res_dir="results"
 
 python3 scripts/evaluation/inference.py \

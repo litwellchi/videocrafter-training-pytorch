@@ -352,6 +352,7 @@ class DDPM(pl.LightningModule):
 
     @torch.no_grad()
     def validation_step(self, batch, batch_idx):
+        torch.cuda.empty_cache()
         _, loss_dict_no_ema = self.shared_step(batch)
         with self.ema_scope():
             _, loss_dict_ema = self.shared_step(batch)
@@ -478,6 +479,7 @@ class LatentDiffusion(DDPM):
                  scale_by_std=False,
                  encoder_type="2d",
                  only_model=False,
+                 empty_params_only=False,
                  use_scale=False,
                  scale_a=1,
                  scale_b=0.3,
@@ -496,6 +498,7 @@ class LatentDiffusion(DDPM):
         self.cond_stage_trainable = cond_stage_trainable
         self.cond_stage_key = cond_stage_key
 
+        self.empty_params_only = empty_params_only
         # scale factor
         self.use_scale=use_scale
         if self.use_scale:
@@ -541,7 +544,37 @@ class LatentDiffusion(DDPM):
             self.init_from_ckpt(ckpt_path, ignore_keys, only_model=only_model)
             self.restarted_from_ckpt = True
                 
+    def configure_optimizers(self):
+        """ configure_optimizers for LatentDiffusion """
+        lr = self.learning_rate
+        if self.empty_params_only and hasattr(self, "empty_paras"):
+            params = [p for n, p in self.model.named_parameters() if n in self.empty_paras]
+            print('self.empty_paras', len(self.empty_paras))
+            for n, p in self.model.named_parameters():
+                if n not in self.empty_paras:
+                    p.requires_grad = False
+            mainlogger.info(f"@Training [{len(params)}] Empty Paramters ONLY.")
+        else:
+            params = list(self.model.parameters())
+            mainlogger.info(f"@Training [{len(params)}] Full Paramters.")
+               
+        if self.learn_logvar:
+            mainlogger.info('Diffusion model optimizing logvar')
+            if isinstance(params[0], dict):
+                params.append({"params": [self.logvar]})
+            else:
+                params.append(self.logvar)
 
+        ## optimizer
+        optimizer = torch.optim.AdamW(params, lr=lr)
+        ## lr scheduler
+        if self.use_scheduler:
+            mainlogger.info("Setting up LambdaLR scheduler...")
+            lr_scheduler = self.configure_schedulers(optimizer)
+            return [optimizer], [lr_scheduler]
+        
+        return optimizer
+        
     def make_cond_schedule(self, ):
         self.cond_ids = torch.full(size=(self.num_timesteps,), fill_value=self.num_timesteps - 1, dtype=torch.long)
         ids = torch.round(torch.linspace(0, self.num_timesteps - 1, self.num_timesteps_cond)).long()
