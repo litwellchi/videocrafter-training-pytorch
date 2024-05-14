@@ -1,4 +1,7 @@
 model:
+  base_learning_rate: 6.0e-06 # 1.5e-04
+  scale_lr: False
+  empty_params_only: True
   target: lvdm.models.ddpm3d.LatentDiffusion
   params:
     linear_start: 0.00085
@@ -118,13 +121,13 @@ lightning:
       params:
         filename: "{epoch:06}-{step:09}"
         save_weights_only: False
-        every_n_epochs: 300
-        every_n_train_steps: null
+        every_n_epochs: 1
+        every_n_train_steps: 20000
   trainer:
     benchmark: True
     batch_size: 2
     num_workers: 38
-    num_nodes: 1
+    num_nodes: 2
     accumulate_grad_batches: 2
     max_epochs: 2000
   modelcheckpoint:

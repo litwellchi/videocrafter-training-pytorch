@@ -104,6 +104,7 @@ class DataModuleFromConfig(pl.LightningDataModule):
         pass
 
     def setup(self,stage=None):
+        print(self.dataset_configs)
         self.datasets = dict(
             (k, instantiate_from_config(self.dataset_configs[k]))
             for k in self.dataset_configs)
@@ -166,7 +167,7 @@ if __name__ == "__main__":
     else:
         nowname = now + "_" + opt.name + opt.postfix
     logdir = os.path.join(opt.logdir, nowname)
-    
+
     if opt.auto_resume:
         ckpt = os.path.join(logdir, "checkpoints", "last.ckpt")
         if os.path.exists(ckpt):

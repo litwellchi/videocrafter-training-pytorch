@@ -1,17 +1,17 @@
 #!/bin/bash -l
 
 # SLURM SUBMIT SCRIPT
-#SBTACH --job-name=cnn_unet_video_16node
-#SBATCH --nodes=8            # This needs to match Trainer(num_nodes=...)
-#SBATCH -p project   #important and necessary
+#SBTACH --job-name=vc2
+#SBATCH --nodes=2           # This needs to match Trainer(num_nodes=...)
+#SBATCH -p large-project   #important and necessary
 #SBATCH --gres=gpu:8
 #SBATCH --ntasks-per-node=8   # This needs to match Trainer(devices=...)
-#SBATCH --mem=0
-#SBATCH --time=24:00:00 # must set the training time by default. 24h max...
-#SBATCH --cpus-per-task=8
+#SBATCH --time=7-00:00:00 # must set the training time by default. 24h max...
+#SBATCH --cpus-per-task=28
 #SBATCH --output=srun_output/_%j/output.txt
 #SBATCH --error=srun_output/_%j/error.txt
 #SBATCH --signal=SIGUSR1@90 # reboot if the process is killed..
+#SBATCH --account=vgenfmod
 
 # debugging flags (optional)
 
@@ -48,8 +48,10 @@ PROJ_ROOT="./"                      # root directory for saving experiment logs
 EXPNAME="test_macvid_t2v_512_debug"        # experiment name 
 # EXPNAME="test_macvid_t2v_512_3.5m_$current_time"        # experiment name 
 DATADIR="configs/training_data/train_data.yaml"   # dataset directory
-CONFIG="configs/train_t2v_512_v1.0.yaml"
-CKPT_RESUME="/project/suptest/xchiaa/shared_ckpts/VideoCrafter/Text2Video-512/model.ckpt"
+# CONFIG="configs/train_t2v_512_v1.0.yaml"
+# CKPT_RESUME="/project/suptest/xchiaa/shared_ckpts/VideoCrafter/Text2Video-512/model.ckpt"
+CONFIG="configs/train_t2v_512_v2.0.yaml"
+CKPT_RESUME='/scratch/vgenfmod/shared_ckpts/VideoCrafter/VideoCrafter2/model.ckpt'
 # CKPT_RESUME="checkpoints/model.ckpt"
 # run
 export TOKENIZERS_PARALLELISM=false
@@ -62,5 +64,5 @@ srun python train_main.py \
 --name $EXPNAME \
 --logdir $PROJ_ROOT \
 --auto_resume True \
-lightning.trainer.num_nodes=8 \
+lightning.trainer.num_nodes=2 \
 --load_from_checkpoint $CKPT_RESUME 

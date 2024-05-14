@@ -26,7 +26,7 @@ class MaCVid(Dataset):
                  data_root,
                  resolution,
                  video_length,
-                 frame_stride=4,
+                 frame_stride=2,
                  subset_split='all',
                  clip_length=1.0
                  ):
@@ -41,7 +41,7 @@ class MaCVid(Dataset):
 
         if isinstance(self.resolution, int):
             self.resolution = [self.resolution, self.resolution]
-        assert(isinstance(self.resolution, list) and len(self.resolution) == 2)
+        # assert(isinstance(self.resolution, list) and len(self.resolution) == 2)
 
         self._make_dataset()
     
@@ -52,22 +52,19 @@ class MaCVid(Dataset):
         print("DATASET CONFIG:")
         print(self.config)
         self.videos = []
-        for meta_path in self.config['META']:
-            metadata_path = os.path.join(meta_path,'metadata_catpion.json')
+        for metadata_path in self.config['META']:
             with open(metadata_path, 'r') as f:
+                video_data_root = os.path.dirname(os.path.dirname(os.path.dirname(metadata_path)))+'/videos'
                 videos = json.load(f)
                 for item in videos:
-                    if item['basic']["clip_duration"] < self.clip_length: continue
-                    item['basic']['clip_path'] = os.path.join(meta_path,item['basic']['clip_path'])
+                    item['basic']['clip_path'] = os.path.join(video_data_root,item['basic']['clip_path'])
                     self.videos.append(item)
                 
         print(f'Number of videos = {len(self.videos)}')
 
     def __getitem__(self, index):
         while True:
-            # video_path = os.path.join(self.data_root, f"videos/{self.videos.loc[index]['page_dir']}") + f"/{self.videos.loc[index]['videoid']}.mp4"
-            # video_path = os.path.join(self.data_root, '.'+self.videos[index]['basic']['clip_path'])
-            video_path = os.path.join(self.data_root, self.videos[index]['basic']['clip_path'])
+            video_path = self.videos[index]['basic']['clip_path']
             try:
                 video_reader = VideoReader(video_path, ctx=cpu(0), width=self.resolution[1], height=self.resolution[0])
                 if len(video_reader) < self.video_length:
