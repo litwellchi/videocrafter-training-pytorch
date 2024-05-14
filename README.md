@@ -1,5 +1,3 @@
-## 这玩意就是VideoCrafter但是咱们训个更牛逼的
-焕发HKUST新荣光
 
 ## TODO
 1. Load Videocrafter2 weight
