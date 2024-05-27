@@ -81,7 +81,7 @@ model:
 data:
   target: train_main.DataModuleFromConfig
   params:
-    batch_size: 2
+    batch_size: 3
     num_workers: 16
     wrap: false
     train:
@@ -102,7 +102,7 @@ data:
         data_root: configs/training_data/val_data.yaml
         resolution: [320, 512]
         video_length: 16
-        clip_length: 3.0
+        # clip_length: 3.0
         # dataset_name: webvid
         subset_split: all
         # spatial_transform: center_crop_resize
@@ -121,17 +121,20 @@ lightning:
       params:
         filename: "{epoch:06}-{step:09}"
         save_weights_only: False
-        every_n_epochs: 1
-        every_n_train_steps: 20000
+        # every_n_epochs: 1
+        save_top_k: -1
+        every_n_train_steps: 10000
   trainer:
     benchmark: True
-    batch_size: 2
+    batch_size: 3
     num_workers: 38
-    num_nodes: 2
+    num_nodes: 4
     accumulate_grad_batches: 2
     max_epochs: 2000
   modelcheckpoint:
     target: pytorch_lightning.callbacks.ModelCheckpoint
     params:
-      every_n_epochs: 1
+      # every_n_epochs: 1
       filename: "{epoch:04}-{step:06}"
+      save_top_k: -1
+      every_n_train_steps: 10000
